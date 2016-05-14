@@ -31,7 +31,7 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Renginys renginys = _context.Renginiai.Single(m => m.ID == id);
+            Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
             if (renginys == null)
             {
                 return HttpNotFound();
@@ -62,6 +62,8 @@ namespace WebApplication3.Controllers
                 renginys.ArPrasidejo = false;
                 if (ModelState.IsValid && renginys.Aikstele != null)
                 {
+                    string temporaryID = System.Guid.NewGuid().ToString();
+                    renginys.RenginysID = temporaryID;
                     _context.Renginiai.Add(renginys);
                     _context.SaveChanges();
                     return RedirectToAction("Index");
@@ -79,7 +81,7 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Renginys renginys = _context.Renginiai.Single(m => m.ID == id);
+            Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
             if (renginys == null)
             {
                 return HttpNotFound();
@@ -112,7 +114,7 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Renginys renginys = _context.Renginiai.Single(m => m.ID == id);
+            Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
             if (renginys == null)
             {
                 return HttpNotFound();
@@ -127,7 +129,7 @@ namespace WebApplication3.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {
-            Renginys renginys = _context.Renginiai.Single(m => m.ID == id);
+            Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
             _context.Renginiai.Remove(renginys);
             _context.SaveChanges();
             return RedirectToAction("Index");

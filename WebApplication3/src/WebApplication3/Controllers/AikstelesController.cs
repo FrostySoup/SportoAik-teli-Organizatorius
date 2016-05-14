@@ -31,7 +31,7 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Aikstele aikstele = _context.Aiksteles.Single(m => m.ID == id);
+            Aikstele aikstele = _context.Aiksteles.Single(m => m.AiksteleID == id);
             if (aikstele == null)
             {
                 return HttpNotFound();
@@ -55,6 +55,8 @@ namespace WebApplication3.Controllers
         {
             if (ModelState.IsValid)
             {
+                string temporaryID = System.Guid.NewGuid().ToString();
+                aikstele.AiksteleID = temporaryID;
                 _context.Aiksteles.Add(aikstele);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
@@ -71,7 +73,7 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Aikstele aikstele = _context.Aiksteles.Single(m => m.ID == id);
+            Aikstele aikstele = _context.Aiksteles.Single(m => m.AiksteleID == id);
             if (aikstele == null)
             {
                 return HttpNotFound();
@@ -104,7 +106,7 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Aikstele aikstele = _context.Aiksteles.Single(m => m.ID == id);
+            Aikstele aikstele = _context.Aiksteles.Single(m => m.AiksteleID == id);
             if (aikstele == null)
             {
                 return HttpNotFound();
@@ -119,7 +121,7 @@ namespace WebApplication3.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {
-            Aikstele aikstele = _context.Aiksteles.Single(m => m.ID == id);
+            Aikstele aikstele = _context.Aiksteles.Single(m => m.AiksteleID == id);
             _context.Aiksteles.Remove(aikstele);
             _context.SaveChanges();
             return RedirectToAction("Index");

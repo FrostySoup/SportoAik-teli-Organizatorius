@@ -12,12 +12,12 @@
     <title>Index</title>
 </head>
 <body>
-@if (User.Identity.IsAuthenticated)
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
+    @if (User.Identity.IsAuthenticated)
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
 <table class="table">
     <tr>
         <th>
@@ -58,9 +58,9 @@
         @if (User.Identity.IsAuthenticated)
         {
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.RenginysID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.RenginysID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RenginysID">Delete</a>
             </td>
         }
     </tr>

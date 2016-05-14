@@ -8,7 +8,8 @@ namespace WebApplication3.Models.AikstelesModeliai
 {
     public class Renginys
     {
-        public string ID { get; set; }
+        [Key]
+        public string RenginysID { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

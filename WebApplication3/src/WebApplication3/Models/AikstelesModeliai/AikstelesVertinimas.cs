@@ -1,10 +1,12 @@
-﻿using WebApplication3.Models.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+using WebApplication3.Models.Identity;
 
 namespace WebApplication3.Models.AikstelesModeliai
 {
     public class AikstelesVertinimas
     {
-        public string ID { get; set; }
+        [Key]
+        public string AikstelesVertinimasID { get; set; }
         public int Vertinimas { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
