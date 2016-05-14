@@ -14,7 +14,7 @@ namespace WebApplication3.Models.AikstelesModeliai
         public string Adresas { get; set; }
         public string Miestas { get; set; }
 
-        public ICollection<AikstelesVertinimas> vertinimai { get; set; }
-        public ICollection<AikstelesKomentaras> komentarai { get; set; }
+        public ICollection<AikstelesVertinimas> Vertinimai { get; set; }
+        public ICollection<AikstelesKomentaras> Komentarai { get; set; }
     }
 }

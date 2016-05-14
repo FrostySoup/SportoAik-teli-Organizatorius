@@ -1,0 +1,67 @@
+@model IEnumerable<WebApplication3.Models.AikstelesModeliai.Renginys>
+
+@{
+    ViewData["Title"] = "Renginiai";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ArPrasidejo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SportoSaka)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ZaidejuKiekis)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Data)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RenginioAutoriausID)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ArPrasidejo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SportoSaka)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ZaidejuKiekis)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Data)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RenginioAutoriausID)
+        </td>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        }
+    </tr>
+}
+</table>
+</body>
+</html>

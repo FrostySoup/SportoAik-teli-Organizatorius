@@ -13,6 +13,6 @@ namespace WebApplication3.Models.AikstelesModeliai
         public string Komentaras { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
-        public Aikstele aikstele { get; set; }
+        public Aikstele Aikstele { get; set; }
     }
 }
