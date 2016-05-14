@@ -1,0 +1,72 @@
+@model WebApplication3.Models.AikstelesModeliai.Aikstele
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Aikstele</h4>
+        <hr />
+        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ID" />
+        <div class="form-group">
+            <label asp-for="Adresas" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Adresas" class="form-control" />
+                <span asp-validation-for="Adresas" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="ArPatvirtinta" />
+                    <label asp-for="ArPatvirtinta"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="LatY" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="LatY" class="form-control" />
+                <span asp-validation-for="LatY" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="LongX" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="LongX" class="form-control" />
+                <span asp-validation-for="LongX" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Miestas" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Miestas" class="form-control" />
+                <span asp-validation-for="Miestas" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+</body>
+</html>

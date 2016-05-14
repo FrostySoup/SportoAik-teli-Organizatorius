@@ -8,22 +8,22 @@ using Microsoft.AspNet.Authorization;
 
 namespace WebApplication3.Controllers
 {
-    public class RenginysController : Controller
+    public class AikstelesController : Controller
     {
         private AppDbContext _context;
 
-        public RenginysController(AppDbContext context)
+        public AikstelesController(AppDbContext context)
         {
             _context = context;    
         }
 
-        // GET: Renginys
+        // GET: Aiksteles
         public IActionResult Index()
         {
-            return View(_context.Renginiai.ToList());
+            return View(_context.Aiksteles.ToList());
         }
 
-        // GET: Renginys/Details/5
+        // GET: Aiksteles/Details/5
         public IActionResult Details(string id)
         {
             if (id == null)
@@ -31,46 +31,38 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Renginys renginys = _context.Renginiai.Single(m => m.ID == id);
-            if (renginys == null)
+            Aikstele aikstele = _context.Aiksteles.Single(m => m.ID == id);
+            if (aikstele == null)
             {
                 return HttpNotFound();
             }
 
-            return View(renginys);
+            return View(aikstele);
         }
 
-        // GET: Renginys/Create
+        // GET: Aiksteles/Create
         [Authorize]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Renginys/Create
+        // POST: Aiksteles/Create
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Renginys renginys)
+        public IActionResult Create(Aikstele aikstele)
         {
-            var currentUser = _context.Users
-                .Include(x => x.Books)
-                .Where(x => x.Email == User.Identity.Name)
-                .FirstOrDefault();
-            if (currentUser != null) {
-                renginys.RenginioAutoriausID = currentUser.Id;
-                renginys.ArPrasidejo = false;
-                if (ModelState.IsValid && renginys.Aikstele != null)
-                {
-                    _context.Renginiai.Add(renginys);
-                    _context.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+            if (ModelState.IsValid)
+            {
+                _context.Aiksteles.Add(aikstele);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return View(renginys);
+            return View(aikstele);
         }
 
-        // GET: Renginys/Edit/5
+        // GET: Aiksteles/Edit/5
         [Authorize]
         public IActionResult Edit(string id)
         {
@@ -79,32 +71,32 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Renginys renginys = _context.Renginiai.Single(m => m.ID == id);
-            if (renginys == null)
+            Aikstele aikstele = _context.Aiksteles.Single(m => m.ID == id);
+            if (aikstele == null)
             {
                 return HttpNotFound();
             }
-            return View(renginys);
+            return View(aikstele);
         }
 
-        // POST: Renginys/Edit/5
+        // POST: Aiksteles/Edit/5
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Renginys renginys)
+        public IActionResult Edit(Aikstele aikstele)
         {
             if (ModelState.IsValid)
             {
-                _context.Update(renginys);
+                _context.Update(aikstele);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(renginys);
+            return View(aikstele);
         }
 
-        // GET: Renginys/Delete/5
-        [ActionName("Delete")]
+        // GET: Aiksteles/Delete/5
         [Authorize]
+        [ActionName("Delete")]
         public IActionResult Delete(string id)
         {
             if (id == null)
@@ -112,23 +104,23 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Renginys renginys = _context.Renginiai.Single(m => m.ID == id);
-            if (renginys == null)
+            Aikstele aikstele = _context.Aiksteles.Single(m => m.ID == id);
+            if (aikstele == null)
             {
                 return HttpNotFound();
             }
 
-            return View(renginys);
+            return View(aikstele);
         }
 
-        // POST: Renginys/Delete/5
+        // POST: Aiksteles/Delete/5
         [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)
         {
-            Renginys renginys = _context.Renginiai.Single(m => m.ID == id);
-            _context.Renginiai.Remove(renginys);
+            Aikstele aikstele = _context.Aiksteles.Single(m => m.ID == id);
+            _context.Aiksteles.Remove(aikstele);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }

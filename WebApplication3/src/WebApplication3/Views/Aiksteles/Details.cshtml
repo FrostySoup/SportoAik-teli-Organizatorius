@@ -1,0 +1,58 @@
+@model WebApplication3.Models.AikstelesModeliai.Aikstele
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+
+<div>
+    <h4>Aikstele</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Adresas)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Adresas)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ArPatvirtinta)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ArPatvirtinta)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LatY)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LatY)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LongX)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LongX)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Miestas)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Miestas)
+        </dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>
+</body>
+</html>
