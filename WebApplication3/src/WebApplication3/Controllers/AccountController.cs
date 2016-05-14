@@ -53,7 +53,7 @@ namespace WebApplication3.Controllers
                     var store = new RoleStore<IdentityRole>(_context);
                     var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
                     var role = new IdentityRole { Name = "Administrators" };
-                    manager.CreateAsync(role);
+                    await manager.CreateAsync(role);
                 }
 
                 if (!_context.Roles.Any(r => r.Name == "User"))
@@ -61,7 +61,7 @@ namespace WebApplication3.Controllers
                     var store = new RoleStore<IdentityRole>(_context);
                     var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
                     var role = new IdentityRole { Name = "User" };
-                    manager.CreateAsync(role);
+                    await manager.CreateAsync(role);
                 }
                 var result = await _securityManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

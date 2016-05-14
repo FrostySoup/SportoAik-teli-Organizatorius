@@ -8,11 +8,11 @@ using Microsoft.AspNet.Authorization;
 
 namespace WebApplication3.Controllers
 {
-    public class BooksController : Controller
+    public class BookController : Controller
     {
         private AppDbContext _context;
 
-        public BooksController(AppDbContext context)
+        public BookController(AppDbContext context)
         {
             _context = context;    
         }
