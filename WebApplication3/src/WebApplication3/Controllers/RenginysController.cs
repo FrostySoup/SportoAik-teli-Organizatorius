@@ -7,6 +7,7 @@ using WebApplication3.Models.Identity;
 using Microsoft.AspNet.Authorization;
 using static WebApplication3.DataHelpers.Sportas;
 using WebApplication3.DataHelpers;
+using System;
 
 namespace WebApplication3.Controllers
 {
@@ -21,8 +22,17 @@ namespace WebApplication3.Controllers
 
         // GET: Renginys
         public IActionResult Index()
-        {
+        { 
             return View(_context.Renginiai.ToList());
+        }
+
+        [Authorize]
+        public IActionResult IndexMano()
+        {
+            var currentUser = _context.Users
+                .Where(x => x.Email == User.Identity.Name)
+                .FirstOrDefault();
+            return View(_context.Renginiai.Where(x => x.RenginioAutoriausID == currentUser.Id).ToList());
         }
 
         // GET: Renginys/Details/5
@@ -39,6 +49,14 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
+            var email = _context.Users
+                .Where(x => x.Id == renginys.RenginioAutoriausID)
+                .First().Email;
+            var users =
+                from r in _context.Renginiai
+                from u in _context.Users
+                where r.RenginysID == id
+                select u;
             return View(renginys);
         }
 
@@ -55,6 +73,7 @@ namespace WebApplication3.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Renginys renginys)
         {
+
             var currentUser = _context.Users
                 .Where(x => x.Email == User.Identity.Name)
                 .FirstOrDefault();
@@ -137,6 +156,41 @@ namespace WebApplication3.Controllers
             Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
             _context.Renginiai.Remove(renginys);
             _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+        [Authorize]
+        [HttpPost, ActionName("Prisijungti")]
+        public IActionResult Prisijungti(string id)
+        {
+            Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
+            var currentUser = _context.Users
+                .Where(x => x.Email == User.Identity.Name)
+                .FirstOrDefault();
+            bool canJoin = true;
+            var user =
+                from r in _context.Renginiai
+                from u in _context.Users
+                where r.RenginysID == renginys.RenginysID
+                select u;
+            foreach (ApplicationUser u in user)
+            {
+                if (u.Id.Equals(currentUser))
+                    canJoin = false;
+            }
+            if (canJoin) {
+                if (renginys.UserRenginys == null)
+                    renginys.UserRenginys = new System.Collections.Generic.List<UserRenginys>();
+                renginys.UserRenginys.Add(new UserRenginys()
+                {
+                    RenginysId = renginys.RenginysID,
+                    ApplicationUserId = currentUser.Id
+                });
+                _context.Renginiai.Update(renginys);
+                _context.SaveChanges();
+            }
+            
             return RedirectToAction("Index");
         }
     }

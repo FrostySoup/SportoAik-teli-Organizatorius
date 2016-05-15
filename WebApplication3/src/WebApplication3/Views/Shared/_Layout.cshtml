@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/theme.css">
     <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <title>@ViewBag.Title</title>
 </head>
 <body>
@@ -32,6 +33,7 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a asp-controller="Renginys" asp-action="Index">Renginiai</a></li>
+                    <li><a asp-controller="Renginys" asp-action="IndexMano">Mano renginiai</a></li>
                     <li><a asp-controller="Aiksteles" asp-action="Index">Aikštelės</a></li>
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -89,8 +91,11 @@
         <p>IFF-3/2 studentai. Gatvės Sporto Organizatorius. 2016.</p>
     </div>
     <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="~/lib/moment/min/moment.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <script src="~/js/site.js"></script>
+
     @RenderSection("Scripts", false)
 </body>
 </html>

@@ -34,6 +34,19 @@ namespace WebApplication3.Models.Identity
                 .HasOne(pt => pt.Komanda)
                 .WithMany(t => t.Turnyrai)
                 .HasForeignKey(pt => pt.KomandaID);
+
+            builder.Entity<UserRenginys>()
+                .HasKey(t => new { t.RenginysId, t.ApplicationUserId });
+
+            builder.Entity<UserRenginys>()
+                .HasOne(pt => pt.Renginys)
+                .WithMany(p => p.UserRenginys)
+                .HasForeignKey(pt => pt.RenginysId);
+
+            builder.Entity<UserRenginys>()
+                .HasOne(pt => pt.ApplicationUser)
+                .WithMany(t => t.UserRenginys)
+                .HasForeignKey(pt => pt.ApplicationUserId);
         }
 
         public DbSet<Komanda> Komanda { get; set; }

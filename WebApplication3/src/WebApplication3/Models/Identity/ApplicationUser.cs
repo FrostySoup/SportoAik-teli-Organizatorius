@@ -13,5 +13,6 @@ namespace WebApplication3.Models.Identity
         public ICollection<Book> Books { get; set; }
         public ICollection<AikstelesVertinimas> Vertinimai { get; set; }
         public ICollection<AikstelesKomentaras> Komentarai { get; set; }
+        public List<UserRenginys> UserRenginys { get; set; }
     }
 }
