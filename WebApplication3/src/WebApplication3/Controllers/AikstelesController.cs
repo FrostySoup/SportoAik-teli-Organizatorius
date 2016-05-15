@@ -5,6 +5,9 @@ using Microsoft.Data.Entity;
 using WebApplication3.Models.AikstelesModeliai;
 using WebApplication3.Models.Identity;
 using Microsoft.AspNet.Authorization;
+using System.Collections.Generic;
+using System;
+using WebApplication3.DataHelpers;
 
 namespace WebApplication3.Controllers
 {
@@ -21,6 +24,26 @@ namespace WebApplication3.Controllers
         public IActionResult Index()
         {
             return View(_context.Aiksteles.ToList());
+        }
+
+        [HttpGet("AikstelesMap")]
+        public IActionResult GetAiksteles()
+        {
+            List<AiksteleMap> aiksteles = new List<AiksteleMap>();
+            try
+            {
+                var dbAiksteles = _context.Aiksteles.Where(x => x.ArPatvirtinta == false).ToList();
+                foreach (var aikstele in dbAiksteles)
+                {
+                    aiksteles.Add(new AiksteleMap(aikstele));
+                }
+            }
+            catch (Exception)
+            {
+                return HttpNotFound();
+            }
+
+            return Ok(aiksteles);
         }
 
         // GET: Aiksteles/Details/5

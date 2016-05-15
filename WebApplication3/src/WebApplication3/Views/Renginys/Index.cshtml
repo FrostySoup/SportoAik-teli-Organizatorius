@@ -32,9 +32,6 @@
         <th>
             @Html.DisplayNameFor(model => model.Data)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RenginioAutoriausID)
-        </th>
         <th></th>
     </tr>
     
@@ -53,16 +50,10 @@
             @Html.DisplayFor(modelItem => item.Data)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.RenginioAutoriausID)
+            <a asp-action="Edit" asp-route-id="@item.RenginysID">Redaguoti</a> 
+            <a asp-action="Delete" asp-route-id="@item.RenginysID">Pašalinti</a> 
+            <a asp-action="Details" asp-route-id="@item.RenginysID">Informacija</a>
         </td>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RenginysID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RenginysID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RenginysID">Delete</a>
-            </td>
-        }
     </tr>
 }
 </table>

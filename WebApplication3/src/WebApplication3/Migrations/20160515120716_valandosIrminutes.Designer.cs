@@ -8,9 +8,10 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160515120716_valandosIrminutes")]
+    partial class valandosIrminutes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -195,8 +196,6 @@ namespace WebApplication3.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int?>("KomandaKomandaID");
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -229,43 +228,6 @@ namespace WebApplication3.Migrations
                         .HasAnnotation("Relational:Name", "UserNameIndex");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Komanda", b =>
-                {
-                    b.Property<int>("KomandaID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("KapitonasId");
-
-                    b.Property<string>("Pavadinimas");
-
-                    b.HasKey("KomandaID");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Turnyras", b =>
-                {
-                    b.Property<int>("TurnyrasID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("KomanduKiekis");
-
-                    b.Property<string>("Pavadinimas");
-
-                    b.Property<string>("TurnyroAutoriusId");
-
-                    b.Property<int>("TurnyroBusena");
-
-                    b.HasKey("TurnyrasID");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.TurnyroDalyvis", b =>
-                {
-                    b.Property<int>("KomandaID");
-
-                    b.Property<int>("TurnyrasID");
-
-                    b.HasKey("KomandaID", "TurnyrasID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
@@ -334,38 +296,6 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.Identity.ApplicationUser", b =>
-                {
-                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Komanda")
-                        .WithMany()
-                        .HasForeignKey("KomandaKomandaID");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Komanda", b =>
-                {
-                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("KapitonasId");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Turnyras", b =>
-                {
-                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("TurnyroAutoriusId");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.TurnyroDalyvis", b =>
-                {
-                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Komanda")
-                        .WithMany()
-                        .HasForeignKey("KomandaID");
-
-                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Turnyras")
-                        .WithMany()
-                        .HasForeignKey("TurnyrasID");
                 });
         }
     }

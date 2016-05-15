@@ -5,6 +5,8 @@ using Microsoft.Data.Entity;
 using WebApplication3.Models.AikstelesModeliai;
 using WebApplication3.Models.Identity;
 using Microsoft.AspNet.Authorization;
+using static WebApplication3.DataHelpers.Sportas;
+using WebApplication3.DataHelpers;
 
 namespace WebApplication3.Controllers
 {
@@ -54,13 +56,16 @@ namespace WebApplication3.Controllers
         public IActionResult Create(Renginys renginys)
         {
             var currentUser = _context.Users
-                .Include(x => x.Books)
                 .Where(x => x.Email == User.Identity.Name)
                 .FirstOrDefault();
             if (currentUser != null) {
+                int saka = -1;
+                if (System.Int32.TryParse(renginys.SportoSaka, out saka)){
+                    renginys.SportoSaka = Sportas.Zaidimas(saka);
+                }             
                 renginys.RenginioAutoriausID = currentUser.Id;
                 renginys.ArPrasidejo = false;
-                if (ModelState.IsValid && renginys.Aikstele != null)
+                if (ModelState.IsValid && saka >= 0)
                 {
                     string temporaryID = System.Guid.NewGuid().ToString();
                     renginys.RenginysID = temporaryID;
