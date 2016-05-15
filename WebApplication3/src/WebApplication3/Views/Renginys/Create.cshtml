@@ -1,5 +1,5 @@
 @model WebApplication3.Models.AikstelesModeliai.Renginys
-
+@using WebApplication3.DataHelpers
 @{
     ViewData["Title"] = "Create";
 }
@@ -16,15 +16,18 @@
 <form asp-action="Create">
     <div class="form-horizontal">
         <h4>Renginys</h4>
-        <hr />
-        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+
+
         <div class="form-group">
             <label asp-for="SportoSaka" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="SportoSaka" class="form-control" />
+                <select asp-for="SportoSaka" asp-items="Html.GetEnumSelectList<Sportas.SportoZaidimai>()" class="form-control"></select>
                 <span asp-validation-for="SportoSaka" class="text-danger" />
             </div>
         </div>
+
+
+
         <div class="form-group">
             <label asp-for="ZaidejuKiekis" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -39,6 +42,27 @@
                 <span asp-validation-for="Data" class="text-danger" />
             </div>
         </div>
+
+        <div class="container">
+            <div class="row">
+                <div class='col-sm-6'>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });
+                </script>
+            </div>
+        </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />

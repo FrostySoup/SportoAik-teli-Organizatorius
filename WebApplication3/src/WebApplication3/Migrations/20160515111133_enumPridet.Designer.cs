@@ -8,9 +8,10 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160515111133_enumPridet")]
+    partial class enumPridet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -151,12 +152,9 @@ namespace WebApplication3.Migrations
 
                     b.Property<bool>("ArPrasidejo");
 
-                    b.Property<DateTimeOffset>("Data");
+                    b.Property<DateTime>("Data");
 
                     b.Property<string>("RenginioAutoriausID");
-
-                    b.Property<string>("SportoSaka")
-                        .IsRequired();
 
                     b.Property<int>("ZaidejuKiekis");
 

@@ -13,9 +13,9 @@ namespace WebApplication3.Models.AikstelesModeliai
 
         [Required]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
-        [Display(Name = "Renginio laikas")]
-        public DateTime Data { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yy H:mm}")]
+        [Display(Name = "Renginio data")]
+        public DateTimeOffset Data { get; set; }
 
         [Required]
         [DataType(DataType.Text)]

@@ -58,26 +58,18 @@ namespace WebApplication3.Controllers
                     UserName = model.Email,
                     Email = model.Email
                 };
-                if (!_context.Roles.Any(r => r.Name == "Administrators"))
+                if (!_context.Roles.Any(r => r.Name == "Administratorius"))
                 {
                     var store = new RoleStore<IdentityRole>(_context);
                     var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
-                    var role = new IdentityRole { Name = "Administrators" };
-                    manager.CreateAsync(role);
-                }
-
-                if (!_context.Roles.Any(r => r.Name == "User"))
-                {
-                    var store = new RoleStore<IdentityRole>(_context);
-                    var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
-                    var role = new IdentityRole { Name = "User" };
-                    manager.CreateAsync(role);
+                    var role = new IdentityRole { Name = "Administratorius" };
+                    await manager.CreateAsync(role);
                 }
                 var result = await _securityManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
 
-                    await _securityManager.AddToRoleAsync(user, "Administrators");
+                    await _securityManager.AddToRoleAsync(user, "Administratorius");
                     await _loginManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(HomeController.Index), "Home");
                 }

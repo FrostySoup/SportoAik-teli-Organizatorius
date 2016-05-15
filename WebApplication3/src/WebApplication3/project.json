@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "userSecretsId": "",
   "compilationOptions": {
@@ -38,7 +38,12 @@
   },
 
   "frameworks": {
-    "dnx451": { },
+    "dnx451": {
+      "dependencies": {
+        "Microsoft.AspNet.WebApi.Client": "5.2.3",
+        "Microsoft.AspNet.WebApi.WebHost": "5.2.3"
+      }
+    },
     "dnxcore50": { }
   },
 

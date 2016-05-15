@@ -24,18 +24,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Adresas)
         </th>
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrators"))
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Administratorius"))
         {
             <th>
                 @Html.DisplayNameFor(model => model.ArPatvirtinta)
             </th>
         }
-        <th>
-            @Html.DisplayNameFor(model => model.LatY)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LongX)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.Miestas)
         </th>
@@ -48,30 +42,25 @@
         <td>
             @Html.DisplayFor(modelItem => item.Adresas)
         </td>
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrators"))
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Administratorius"))
         {
             <td>
                 @Html.DisplayFor(modelItem => item.ArPatvirtinta)
             </td>
         }
         <td>
-            @Html.DisplayFor(modelItem => item.LatY)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LongX)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Miestas)
         </td>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AiksteleID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AiksteleID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AiksteleID">Delete</a>
-            </td>
-        }
-    </tr>
+        <td>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Administratorius"))
+            {
+
+                <a asp-action="Edit" asp-route-id="@item.AiksteleID">Redaguoti</a> 
+                <a asp-action= "Delete" asp-route-id = "@item.AiksteleID"> Pašalinti </a>
+             }
+                <a asp-action="Details" asp-route-id="@item.AiksteleID">Informacija</a>
+        </td>
+</tr>
 }
 </table>
 </body>
