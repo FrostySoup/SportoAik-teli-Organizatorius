@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication3.Models.Identity;
 
 namespace WebApplication3.Models.AikstelesModeliai
 {
@@ -12,10 +13,8 @@ namespace WebApplication3.Models.AikstelesModeliai
         public string RenginysID { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yy H:mm}")]
         [Display(Name = "Renginio data")]
-        public DateTimeOffset Data { get; set; }
+        public DateTime Data { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
@@ -26,12 +25,14 @@ namespace WebApplication3.Models.AikstelesModeliai
         public bool ArPrasidejo { get; set; }
 
         [Required]
-        [Range(1, 20, ErrorMessage = "Minimalus žaidėjų kiekis 1, maksimalus 20")]
-        [Display(Name = "Žaidėjų skaičius vienoje komandoje")]
+        [Range(1, 20, ErrorMessage = "Minimalus žaidėjų kiekis 1, maksimalus 40")]
+        [Display(Name = "Žaidėjų skaičius")]
         public int ZaidejuKiekis { get; set; }
 
         public string RenginioAutoriausID { get; set; }
 
         public Aikstele Aikstele { get; set; }
+
+        public List<UserRenginys> UserRenginys { get; set; }
     }
 }
