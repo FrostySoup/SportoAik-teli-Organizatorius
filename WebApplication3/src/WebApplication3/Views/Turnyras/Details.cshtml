@@ -1,0 +1,53 @@
+@model WebApplication3.Models.TurnyroModeliai.Turnyras
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Turnyras</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.KomanduKiekis)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.KomanduKiekis)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Pavadinimas)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Pavadinimas)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TurnyroBusena)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TurnyroBusena)
+        </dd>
+    </dl>
+    <h4>Prisijungti prie turnyro</h4>
+    <a asp-action="Join" asp-route-id="@Model.TurnyrasID" class="btn btn-info" role="button">Prisijungti</a>
+    <h4>Turnyro dalyviai</h4>
+
+    @if (Model.Dalyviai != null)
+    {
+        @foreach (var item in Model.Dalyviai)
+        {
+            <p>@Html.DisplayFor(modelItem => item.Komanda.Pavadinimas)</p>
+        }
+    }
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.TurnyrasID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>
+
+<div id="challonge_brackets"></div>
+
+@section Scripts {
+    <script src="~/js/Turnyras/Details/script.js"></script>
+}

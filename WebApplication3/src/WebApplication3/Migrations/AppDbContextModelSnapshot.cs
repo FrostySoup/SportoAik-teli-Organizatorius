@@ -151,7 +151,7 @@ namespace WebApplication3.Migrations
 
                     b.Property<bool>("ArPrasidejo");
 
-                    b.Property<DateTimeOffset>("Data");
+                    b.Property<DateTime>("Data");
 
                     b.Property<string>("RenginioAutoriausID");
 
@@ -161,6 +161,15 @@ namespace WebApplication3.Migrations
                     b.Property<int>("ZaidejuKiekis");
 
                     b.HasKey("RenginysID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.UserRenginys", b =>
+                {
+                    b.Property<string>("RenginysId");
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.HasKey("RenginysId", "ApplicationUserId");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.Book", b =>
@@ -347,6 +356,17 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.AikstelesModeliai.Aikstele")
                         .WithMany()
                         .HasForeignKey("AiksteleAiksteleID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.UserRenginys", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("WebApplication3.Models.AikstelesModeliai.Renginys")
+                        .WithMany()
+                        .HasForeignKey("RenginysId");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.Book", b =>

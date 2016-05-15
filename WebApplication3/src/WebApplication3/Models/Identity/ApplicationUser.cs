@@ -24,6 +24,10 @@ namespace WebApplication3.Models.Identity
 
         public ICollection<AikstelesVertinimas> Vertinimai { get; set; }
         public ICollection<AikstelesKomentaras> Komentarai { get; set; }
+<<<<<<< HEAD
         public ICollection<Pakvietimas> Pakvietimai { get; set; }
+=======
+        public List<UserRenginys> UserRenginys { get; set; }
+>>>>>>> d86538d77b6038846773f032bcb57c799cf5a213
     }
 }
