@@ -31,6 +31,12 @@
 </body>
 </html>*@
 
+@using System.Security.Claims
+@using System.Collections.Generic
+@using Microsoft.AspNet.Http
+@using Microsoft.AspNet.Http.Authentication
+@using WebApplication3.Models.Identity;
+@inject SignInManager<ApplicationUser> SignInManager
 
 <!DOCTYPE html>
 <html>
@@ -89,6 +95,16 @@
                             {
                                 <li><a asp-controller="Account" asp-action="Login">Prisijungti</a></li>
                                 <li><a asp-controller="Account" asp-action="Register">Registruotis</a></li>
+                                var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                                <li>
+                                    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+                                        @foreach (var provider in loginProviders.Take(1))
+                                        {
+                                            <button type="submit" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                                        }
+                                    </form>
+                                </li>
+
                             }
                         </ul>
                     </li>

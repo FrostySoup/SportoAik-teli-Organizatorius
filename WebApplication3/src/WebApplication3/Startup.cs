@@ -12,6 +12,7 @@ using Microsoft.Data.Entity;
 using WebApplication3.Models.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Authentication.Facebook;
 
 namespace WebApplication3
 {
@@ -24,7 +25,7 @@ namespace WebApplication3
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
-            
+
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -42,7 +43,7 @@ namespace WebApplication3
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-            
+
 
             services.AddMvc();
         }
@@ -69,12 +70,22 @@ namespace WebApplication3
 
             app.UseIdentity();
 
+            app.UseFacebookAuthentication(options =>
+            {
+                options.AppId = "512772808930360";
+                options.AppSecret = "955092c504964c3c779e1cdf9dbc240d";
+                options.Scope.Add("email");
+                options.Scope.Add("public_profile");
+                options.UserInformationEndpoint = "https://graph.facebook.com/v2.4/me?fields=id,name,email,first_name,last_name,picture";
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
 
         // Entry point for the application.

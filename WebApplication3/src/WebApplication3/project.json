@@ -1,5 +1,6 @@
 ﻿{
   "version": "1.0.0-*",
+  "userSecretsId": "",
   "compilationOptions": {
     "emitEntryPoint": true
   },
@@ -26,7 +27,9 @@
     "EntityFramework.Core": "7.0.0-rc1-final",
     "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
     "Microsoft.Extensions.CodeGenerators.Mvc": "1.0.0-rc1-final",
-    "EntityFramework.Commands": "7.0.0-rc1-final"
+    "EntityFramework.Commands": "7.0.0-rc1-final",
+    "Microsoft.AspNet.Owin": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Facebook": "1.0.0-rc1-final"
   },
 
   "commands": {
