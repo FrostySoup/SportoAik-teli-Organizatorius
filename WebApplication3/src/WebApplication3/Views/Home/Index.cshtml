@@ -3,20 +3,32 @@
 }
 @using System.Security.Principal
 
-@section Scripts
-{
-    <script src="~/js/home/script.js"></script>
-}
-
-@*@if (User.Identity.IsAuthenticated)
-{
-    @(User.Identity.Name);
-}
-@if (User.Identity.IsAuthenticated && User.IsInRole("Administrators"))
-{
-    <div>Priklauso adminams!</div>
-}*@
-
 <div class="jumbotron">
     <p>Sveiki atvykę į Gatvės Sporto Organizatorių!</p>
 </div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>@(User.Identity.Name)</p>
+
+    @if (User.IsInRole("svecias"))
+    {
+        <p>Svečias</p>
+    }
+    @if (User.IsInRole("vartotojas"))
+    {
+        <p>Vartotojas</p>
+    }
+    @if (User.IsInRole("kurejas"))
+    {
+        <p>Kūrėjas</p>
+    }
+    @if (User.IsInRole("kapitonas"))
+    {
+        <p>Kapitonas</p>
+    }
+    @if (User.IsInRole("administratorius"))
+    {
+        <p>Administratorius</p>
+    }
+}

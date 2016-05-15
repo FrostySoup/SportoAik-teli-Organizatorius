@@ -12,6 +12,7 @@ using WebApplication3.Models.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Authentication.Facebook;
+using WebApplication3.Helpers;
 
 namespace WebApplication3.Controllers
 {
@@ -21,6 +22,8 @@ namespace WebApplication3.Controllers
         private readonly UserManager<ApplicationUser> _securityManager;
         private readonly SignInManager<ApplicationUser> _loginManager;
         private readonly ILogger _logger;
+        private readonly RolesHelper _rolesHelper;
+
         //2
         private AppDbContext _context;
 
@@ -34,6 +37,7 @@ namespace WebApplication3.Controllers
             _loginManager = loginManager;
             _context = context;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _rolesHelper = new RolesHelper(secMgr, context);
         }
 
         //3
@@ -58,26 +62,23 @@ namespace WebApplication3.Controllers
                     UserName = model.Email,
                     Email = model.Email
                 };
-                if (!_context.Roles.Any(r => r.Name == "Administrators"))
+
+                if (!_context.Roles.Any(r => r.Name == "svecias"))
                 {
                     var store = new RoleStore<IdentityRole>(_context);
                     var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
-                    var role = new IdentityRole { Name = "Administrators" };
-                    manager.CreateAsync(role);
+                    await manager.CreateAsync(new IdentityRole { Name = "svecias" });
+                    await manager.CreateAsync(new IdentityRole { Name = "vartotojas" });
+                    await manager.CreateAsync(new IdentityRole { Name = "kurejas" });
+                    await manager.CreateAsync(new IdentityRole { Name = "kapitonas" });
+                    await manager.CreateAsync(new IdentityRole { Name = "administratorius" });
                 }
 
-                if (!_context.Roles.Any(r => r.Name == "User"))
-                {
-                    var store = new RoleStore<IdentityRole>(_context);
-                    var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
-                    var role = new IdentityRole { Name = "User" };
-                    manager.CreateAsync(role);
-                }
                 var result = await _securityManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
-
-                    await _securityManager.AddToRoleAsync(user, "Administrators");
+                    await _rolesHelper.addRoles(model.Email, new List<string>() { Roles.vartotojas });
                     await _loginManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(HomeController.Index), "Home");
                 }
