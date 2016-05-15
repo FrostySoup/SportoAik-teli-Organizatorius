@@ -1,0 +1,50 @@
+@model IEnumerable<WebApplication3.Models.TurnyroModeliai.Turnyras>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.KomanduKiekis)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Pavadinimas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TurnyroBusena)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TurnyroAutorius)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.KomanduKiekis)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Pavadinimas)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TurnyroBusena)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TurnyroAutorius.Email)
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.TurnyrasID">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.TurnyrasID">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.TurnyrasID">Delete</a>
+        </td>
+    </tr>
+}
+</table>
