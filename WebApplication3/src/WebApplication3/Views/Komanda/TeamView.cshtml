@@ -1,0 +1,190 @@
+﻿@model WebApplication3.Models.TurnyroModeliai.Komanda
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Komanda "@Html.DisplayNameFor(model => model.Pavadinimas)"</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-info">Pagrindinė komandos informacija</li>
+                        <li class="list-group-item">
+                            Pavadinimas:<span class="pull-right text-success">
+                                <strong>
+                                    "@Html.DisplayNameFor(model => model.Pavadinimas)"
+                                </strong>
+                            </span>
+                        </li>
+                        <li class="list-group-item">Pozicija:<span class="pull-right"><strong>1</strong></span></li>
+                        <a href="#" class="list-group-item">
+                            Kapitonas:<span class="pull-right">
+                                <strong>
+                                    @Html.DisplayNameFor(model => model.Kapitonas.FullName)
+                                </strong>
+                            </span>
+                        </a>
+                        <a href="#" class="list-group-item">Žaidėjų skaičius:<span class="pull-right"><strong>@Html.DisplayNameFor(model => model.Nariai.Count)</strong></span></a>
+                        <li class="list-group-item">
+                            Komandos sukūrimo data:<span class="pull-right"><strong>2016-03-19</strong></span>
+                        </li>
+                        <li class="list-group-item">
+                            Žaista turnyrų:<span class="pull-right"><strong>30</strong></span>
+                        </li>
+                        <li class="list-group-item">
+                            Laimeta turnyrų:<span class="pull-right"><strong>25</strong></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-info">Komandos žaidėjai</li>
+                        <a href="#" class="list-group-item team-member">
+                            Andrius Rimkus
+                            <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
+                                    data-target="#myModal">
+                                Šalinti [kapitonas]
+                            </button>
+                        </a>
+                        <a href="#" class="list-group-item team-member">
+                            Giedrius Verbyla
+                            <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
+                                    data-target="#myModal">
+                                Šalinti [kapitonas]
+                            </button>
+                        </a>
+                        <a href="#" class="list-group-item team-member">
+                            Deividas Leonavičius
+                            <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
+                                    data-target="#myModal">
+                                Šalinti [kapitonas]
+                            </button>
+                        </a>
+                    </ul>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Pridėti žaidėja</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form asp-action="SearchForPlayers">
+                                <input type="hidden" asp-for="KomandaID" />
+                                <div class="form-group">
+                                    <input asp-for="SearchForPlayers" class="form-control" placeholder="Įvesti žaidėjo vardą">
+                                    <span class="input-group-btn">
+                                        <input type="submit" class="btn btn-default" value="Ieškoti" />
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#profile" role="tab" data-toggle="tab">
+                                Vykstantys
+                                turnyrai
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#messages" role="tab" data-toggle="tab">Pasibaigę turnyrai</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane in active fade" id="profile">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Turnyro pavadinimas</th>
+                                        <th>Paskelbimo data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>"Šilainių taurė"</td>
+                                        <td>2016.03.19</td>
+                                    </tr>
+                                    <tr>
+                                        <td>"Alytaus lyga"</td>
+                                        <td>2016.03.19</td>
+                                    </tr>
+                                    <tr>
+                                        <td>"Šilainių taurė"</td>
+                                        <td>2016.03.19</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <nav class="text-center nav-paginator">
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="messages">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Turnyro pavadinimas</th>
+                                        <th>Pasibaigimo data</th>
+                                        <th>Užimta vieta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>"Šilainių taurė"</td>
+                                        <td>2016.03.19</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>"Alytaus lyga"</td>
+                                        <td>2016.03.19</td>
+                                        <td>4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>"Šilainių taurė"</td>
+                                        <td>2016.03.19</td>
+                                        <td>2</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <nav class="text-center nav-paginator">
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

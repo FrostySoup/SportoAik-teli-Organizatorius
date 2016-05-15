@@ -8,9 +8,10 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160515192455_User_pap3")]
+    partial class User_pap3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -274,20 +275,6 @@ namespace WebApplication3.Migrations
                     b.HasKey("KomandaID", "TurnyrasID");
                 });
 
-            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<int>("komandosId");
-
-                    b.Property<string>("vartotojoId");
-
-                    b.HasKey("Id");
-                });
-
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityRole")
@@ -386,13 +373,6 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.TurnyroModeliai.Turnyras")
                         .WithMany()
                         .HasForeignKey("TurnyrasID");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>
-                {
-                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
                 });
         }
     }

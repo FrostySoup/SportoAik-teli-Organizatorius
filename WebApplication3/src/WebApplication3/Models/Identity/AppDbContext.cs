@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication3.Models.AikstelesModeliai;
 using WebApplication3.Models.TurnyroModeliai;
+using WebApplication3.Models.VartotojoModeliai;
 
 namespace WebApplication3.Models.Identity
 {
@@ -17,6 +18,8 @@ namespace WebApplication3.Models.Identity
         public DbSet<AikstelesKomentaras> AikstelesKomentarai { get; set; }
         public DbSet<AikstelesVertinimas> AikstelesVertinimai { get; set; }
         public DbSet<Turnyras> Turnyras { get; set; }
+        public DbSet<Komanda> Komanda { get; set; }
+        public DbSet<Pakvietimas> Pakvietimas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,9 +37,10 @@ namespace WebApplication3.Models.Identity
                 .HasOne(pt => pt.Komanda)
                 .WithMany(t => t.Turnyrai)
                 .HasForeignKey(pt => pt.KomandaID);
+
+          
+            }
         }
 
-        public DbSet<Komanda> Komanda { get; set; }
 
     }
-}

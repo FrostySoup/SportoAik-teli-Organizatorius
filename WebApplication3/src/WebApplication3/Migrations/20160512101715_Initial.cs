@@ -41,7 +41,9 @@ namespace WebApplication3.Migrations
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserID = table.Column<int>(nullable: false),
-                    UserName = table.Column<string>(nullable: true)
+                    UserName = table.Column<string>(nullable: true),
+                    FullName = table.Column<string>(nullable: true),
+                    KomandosId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

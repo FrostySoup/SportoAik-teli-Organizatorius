@@ -186,10 +186,20 @@ namespace WebApplication3.Controllers
                 ViewData["LoginProvider"] = info.LoginProvider;
                 if (email != null)
                 {
-                    var user = new ApplicationUser { UserName = email, Email = email };
+                    var user = new ApplicationUser { FullName = name ,UserName = email, Email = email };
+
+                   /* var store = new RoleStore<IdentityRole>(_context);
+                    var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
+                    await manager.CreateAsync(new IdentityRole { Name = "svecias" });
+                    await manager.CreateAsync(new IdentityRole { Name = "vartotojas" });
+                    await manager.CreateAsync(new IdentityRole { Name = "kurejas" });
+                    await manager.CreateAsync(new IdentityRole { Name = "kapitonas" });
+                    await manager.CreateAsync(new IdentityRole { Name = "administratorius" });*/
+
                     var result2 = await _securityManager.CreateAsync(user);
                     if (result2.Succeeded)
                     {
+                       // await _rolesHelper.addRoles(email, new List<string>() { Roles.vartotojas });
                         result2 = await _securityManager.AddLoginAsync(user, info);
                         if (result2.Succeeded)
                         {
@@ -224,9 +234,19 @@ namespace WebApplication3.Controllers
                     return View("ExternalLoginFailure");
                 }
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+                /*var store = new RoleStore<IdentityRole>(_context);
+                var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
+                await manager.CreateAsync(new IdentityRole { Name = "svecias" });
+                await manager.CreateAsync(new IdentityRole { Name = "vartotojas" });
+                await manager.CreateAsync(new IdentityRole { Name = "kurejas" });
+                await manager.CreateAsync(new IdentityRole { Name = "kapitonas" });
+                await manager.CreateAsync(new IdentityRole { Name = "administratorius" });*/
+
                 var result = await _securityManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                  //  await _rolesHelper.addRoles(model.Email, new List<string>() { Roles.vartotojas });
                     result = await _securityManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {

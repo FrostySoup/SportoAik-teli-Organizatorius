@@ -18,5 +18,6 @@ namespace WebApplication3.Models.AikstelesModeliai
 
         public ICollection<AikstelesVertinimas> Vertinimai { get; set; }
         public ICollection<AikstelesKomentaras> Komentarai { get; set; }
+       
     }
 }

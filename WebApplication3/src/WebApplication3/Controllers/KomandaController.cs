@@ -4,8 +4,10 @@ using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using WebApplication3.Models.Identity;
 using WebApplication3.Models.TurnyroModeliai;
+using WebApplication3.Models.VartotojoModeliai;
 using WebApplication3.Helpers;
 using Microsoft.AspNet.Identity;
+
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,6 +29,10 @@ namespace WebApplication3.Controllers
         // GET: Komanda
         public IActionResult Index()
         {
+            var currentUser = _context.Users
+                .Where(x => x.Email == User.Identity.Name)
+                .FirstOrDefault();
+            ViewBag.KomandosId = currentUser.KomandosId;
             return View(_context.Komanda.ToList());
         }
 
@@ -47,6 +53,8 @@ namespace WebApplication3.Controllers
             return View(komanda);
         }
 
+        
+
         // GET: Komanda/Create
         public IActionResult Create()
         {
@@ -61,22 +69,30 @@ namespace WebApplication3.Controllers
             if (ModelState.IsValid)
             {
                 var currentUser = _context.Users
-                    .Include(x => x.Books)
-                    .Where(x => x.Email == User.Identity.Name)
-                    .FirstOrDefault();
+                .Where(x => x.Email == User.Identity.Name)
+                .FirstOrDefault();
 
-                if (currentUser != null)
+                var teams = _context.Komanda.Where(t => t.Pavadinimas == komanda.Pavadinimas).ToList();
+                if (teams.Count <= 0)
                 {
+                    
                     komanda.Kapitonas = currentUser;
+                  
+                    Komanda team = new Komanda { Kapitonas = komanda.Kapitonas, Pavadinimas = komanda.Pavadinimas };
+                    await _rolesHelper.addRoles(User.Identity.Name, new List<string>() { Roles.kapitonas });
+
+                    _context.Komanda.Add(komanda);
+                    _context.SaveChanges();
+
+                    var UserTeam = _context.Komanda.Where(t => t.Kapitonas.Id == komanda.Kapitonas.Id).FirstOrDefault();
+                    currentUser.KomandosId = UserTeam.KomandaID;
+                    _context.Update(currentUser);
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Index");
                 }
-
-                await _rolesHelper.addRoles(User.Identity.Name, new List<string>() { Roles.kapitonas });
-
-                _context.Komanda.Add(komanda);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
             }
-
+            ViewBag.TeamCreateError = "Tokia komanda jau egzistuoja!";
             return View(komanda);
         }
 
@@ -115,20 +131,40 @@ namespace WebApplication3.Controllers
         }
 
         // GET: Komanda/Edit/5
-        public IActionResult Edit(int? id)
+        public IActionResult Edit()
         {
-            if (id == null)
-            {
-                return HttpNotFound();
-            }
+            var currentUser = _context.Users
+                .Where(x => x.Email == User.Identity.Name)
+                .FirstOrDefault();
 
-            Komanda komanda = _context.Komanda.Single(m => m.KomandaID == id);
-            if (komanda == null)
-            {
-                return HttpNotFound();
-            }
-            return View(komanda);
+            Komanda team = _context.Komanda.Where(t => t.KomandaID == currentUser.KomandosId).FirstOrDefault();
+            return View(team);
         }
+
+
+        public IActionResult TeamView() {
+            var currentUser = _context.Users
+                .Where(x => x.Email == User.Identity.Name)
+                .FirstOrDefault();
+
+            Komanda team = _context.Komanda.Single(t => t.KomandaID == currentUser.KomandosId);
+            return View(team);
+        }
+
+        // POST: Komanda/TeamView
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SearchForPlayers(Komanda komanda)
+        {
+        
+            if (ModelState.IsValid) {
+                ViewBag.TeamId = komanda.KomandaID;
+                var foundUsers = _context.Users.Where(u => u.FullName == komanda.SearchForPlayers).Where(u => u.KomandosId == 0).ToList();
+                return View(foundUsers);
+            }
+            return View();
+        }
+        
 
         // POST: Komanda/Edit/5
         [HttpPost]
@@ -166,11 +202,23 @@ namespace WebApplication3.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
-        {
+        { 
             Komanda komanda = _context.Komanda.Single(m => m.KomandaID == id);
             _context.Komanda.Remove(komanda);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public IActionResult Invite(int id, ApplicationUser user) {
+            if (ModelState.IsValid)
+            {
+                Pakvietimas invite = new Pakvietimas { komandosId = id, vartotojoId = user.Id };
+                _context.Pakvietimas.Add(invite);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("TeamView");
+        }
     }
+
 }

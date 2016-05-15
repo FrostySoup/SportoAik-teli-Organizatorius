@@ -8,9 +8,10 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160515162354_UserPapildymas")]
+    partial class UserPapildymas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -244,8 +245,6 @@ namespace WebApplication3.Migrations
 
                     b.Property<string>("Pavadinimas");
 
-                    b.Property<string>("SearchForPlayers");
-
                     b.HasKey("KomandaID");
                 });
 
@@ -272,20 +271,6 @@ namespace WebApplication3.Migrations
                     b.Property<int>("TurnyrasID");
 
                     b.HasKey("KomandaID", "TurnyrasID");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<int>("komandosId");
-
-                    b.Property<string>("vartotojoId");
-
-                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
@@ -386,13 +371,6 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.TurnyroModeliai.Turnyras")
                         .WithMany()
                         .HasForeignKey("TurnyrasID");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>
-                {
-                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
                 });
         }
     }
