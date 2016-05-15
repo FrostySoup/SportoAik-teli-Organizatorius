@@ -159,3 +159,5 @@ $RECYCLE.BIN/
 # node
 # =========================
 node_modules/
+/WebApplication3/src/WebApplication3/appsettings.json
+/WebApplication3/src/WebApplication3/project.lock.json
