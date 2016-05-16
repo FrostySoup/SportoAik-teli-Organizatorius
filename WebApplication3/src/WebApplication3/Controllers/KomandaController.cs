@@ -178,7 +178,8 @@ namespace WebApplication3.Controllers
                 .Where(x => x.Email == User.Identity.Name)
                 .FirstOrDefault();
 
-            Komanda team = _context.Komanda.Where(t => t.KomandaID == currentUser.KomandosId).Include(t => t.Nariai).FirstOrDefault();
+            Komanda team = _context.Komanda.Where(t => t.KomandaID == currentUser.KomandosId).Include(t => t.Nariai).Include(t => t.Kapitonas).FirstOrDefault();
+
             return View(team);
         }
 

@@ -20,6 +20,8 @@ namespace WebApplication3.Models.Identity
         public DbSet<Turnyras> Turnyras { get; set; }
         public DbSet<Komanda> Komanda { get; set; }
         public DbSet<Pakvietimas> Pakvietimas { get; set; }
+        public DbSet<Komentaras> Komentaras { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
