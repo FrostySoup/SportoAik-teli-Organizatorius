@@ -8,7 +8,7 @@
         <th></th>
         <th></th>
     </tr>
-
+    
     @foreach (var item in Model)
     {
          
@@ -22,6 +22,11 @@
                 <td>
                     <a asp-action="Invite" asp-route-id="@item.Id" asp-route-teamId="@ViewData["TeamId"]" class="btn btn-info" role="button">Pakviesti</a>
                 </td>
+                <td>
+                    <a asp-controller="Account" asp-action="UserProfile" asp-route-id="@item.Id" class="btn btn-info" role="button">Informacija</a>
+                </td>
            </tr>
+           
     }
+   
 </table>

@@ -1,0 +1,155 @@
+﻿@model WebApplication3.Models.Identity.ApplicationUser
+<div class="container">
+    <ol class="breadcrumb">
+        <li><a href="../index.html">Pradžia</a></li>
+        <li><a href="#">Žaidėjai</a></li>
+        <li class="active">Andrius Rimkus</li>
+    </ol>
+    <div class="panel panel-primary panel-player">
+        <div class="panel-heading">
+            <h3 class="panel-title">Andrius Rimkus</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-10">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-info">Žaidėjo informacija</li>
+                        <li class="list-group-item">
+                            Vardas: <span class="pull-right">
+                                <strong>
+                                    @Model.FullName
+                                </strong>
+                            </span>
+                        </li>
+                        <li class="list-group-item">
+                            Komanda: <span class="pull-right">
+                                <strong>
+                                   
+                                </strong>
+                            </span>
+                        </li>
+                        <li class="list-group-item">
+                            Viso laimėta turnyrų: <span class="pull-right"><strong>5</strong></span>
+                        </li>
+                        <li class="list-group-item">
+                            Viso dalyvauta varžybų: <span class="pull-right"><strong>9</strong></span>
+                        </li>
+                        <li class="list-group-item">
+                            Viso organizuota varžybų: <span class="pull-right"><strong>3</strong></span>
+                        </li>
+                        <li class="list-group-item">
+                            Patikimumas:<input id="input-id" value="4" class="rating-loading">
+                        </li>
+                    </ul>
+
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#profile" role="tab" data-toggle="tab">Komentarai</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#messages" role="tab" data-toggle="tab">
+                                Žaidėjo žaistos
+                                varžybos
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane in active fade" id="profile">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <strong>Andrius Rimkus</strong> <span class="text-muted">komentavo prieš 5 dienas</span>
+                                </div>
+                                <div class="panel-body">
+                                    Gerai pataiko šitas.
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <strong>Deividas Leonavičius</strong> <span class="text-muted">komentavo prieš 5 dienas</span>
+                                </div>
+                                <div class="panel-body">
+                                    Per daug pataiko. Jaučiu aim-bottina.
+                                </div>
+                            </div>
+                            <nav class="nav-paginator">
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="messages">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Sporto šaka</th>
+                                        <th>Tipas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2016.03.19</td>
+                                        <td>Krepšinis</td>
+                                        <td>Varžybos</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2016.03.19</td>
+                                        <td>Krepšinis</td>
+                                        <td>Turnyras</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2016.03.19</td>
+                                        <td>Krepšinis</td>
+                                        <td>Varžybos</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <nav class="nav-paginator">
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success pull-right m-l-10" data-toggle="modal" data-target="#myModal2">
+                        Kviesti į komandą
+                        [kapitonas]
+                    </button>
+                    <button type="button" class="btn btn-success pull-right m-l-10" data-toggle="modal" data-target="#myModal">
+                        Komentuoti
+                        [registruotas]
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
