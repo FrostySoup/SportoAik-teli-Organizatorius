@@ -1,4 +1,5 @@
 @model WebApplication3.Models.AikstelesModeliai.Aikstele
+@using WebApplication3.Models.AikstelesModeliai
 
 @{
     ViewData["Title"] = "Create";
@@ -80,10 +81,10 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-success pull-right m-l-10" data-toggle="modal" data-target="#myModal">
-                    Komentuoti
-                    [registruotas]
-                </button>
+                <form action="/Aiksteles/komentaras" method="Post">
+                    <input type="text" name="Komentaras">                          
+                    <button type="button" class="btn btn-success pull-right m-l-10" data-toggle="modal" data-target="#AikstelesKomentaras">Komentuoti</button>
+                </form>
             </div>
         </div>
     </div>

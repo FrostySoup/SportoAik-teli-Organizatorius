@@ -162,5 +162,13 @@ namespace WebApplication3.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        // POST: Aiksteles/Komentuoti/5
+        [Authorize]
+        [HttpPost, ActionName("Komentuoti")]
+        public IActionResult Komentuoti(AikstelesKomentaras aikstelesKomentaras)
+        {           
+            return RedirectToAction("Index");
+        }
     }
 }
