@@ -50,6 +50,8 @@ namespace WebApplication3.Models.Identity
                 .HasOne(pt => pt.ApplicationUser)
                 .WithMany(t => t.UserRenginys)
                 .HasForeignKey(pt => pt.ApplicationUserId);
+
+            
         }
     }
 

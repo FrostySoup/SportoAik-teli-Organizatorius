@@ -68,7 +68,7 @@ namespace WebApplication3.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = _context.Users
+                ApplicationUser currentUser = _context.Users
                 .Where(x => x.Email == User.Identity.Name)
                 .FirstOrDefault();
 
@@ -80,8 +80,9 @@ namespace WebApplication3.Controllers
                   
                     Komanda team = new Komanda { Kapitonas = komanda.Kapitonas, Pavadinimas = komanda.Pavadinimas };
                     await _rolesHelper.addRoles(User.Identity.Name, new List<string>() { Roles.kapitonas });
-
+                    komanda.Nariai.Add(currentUser);
                     _context.Komanda.Add(komanda);
+                    
                     _context.SaveChanges();
 
                     var UserTeam = _context.Komanda.Where(t => t.Kapitonas.Id == komanda.Kapitonas.Id).FirstOrDefault();
@@ -123,9 +124,39 @@ namespace WebApplication3.Controllers
                 }
 
                 komanda.Nariai.Add(currentUser);
+                currentUser.KomandosId = komanda.KomandaID;
+                List<Pakvietimas> invitations = _context.Pakvietimas.Where(i => i.komandosId == komanda.KomandaID).Where(i2 => i2.vartotojoId == currentUser.Id).ToList();
+                if (invitations.Count > 0) {
+                    foreach (Pakvietimas invitation in invitations) {
+                        _context.Remove(invitation);
+                        
+                    }
+                }
             }
 
             _context.Update(komanda);
+            _context.Update(currentUser);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Ignore(int? id) {
+            var currentUser = _context.Users
+                .Where(x => x.Email == User.Identity.Name)
+                .FirstOrDefault();
+
+            if (currentUser != null)
+            {
+                List<Pakvietimas> invitations = _context.Pakvietimas.Where(i => i.komandosId == id).Where(i2 => i2.vartotojoId == currentUser.Id).ToList();
+                if (invitations.Count > 0)
+                {
+                    foreach (Pakvietimas invitation in invitations)
+                    {
+                        _context.Remove(invitation);
+
+                    }
+                }
+            }
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -147,7 +178,7 @@ namespace WebApplication3.Controllers
                 .Where(x => x.Email == User.Identity.Name)
                 .FirstOrDefault();
 
-            Komanda team = _context.Komanda.Single(t => t.KomandaID == currentUser.KomandosId);
+            Komanda team = _context.Komanda.Where(t => t.KomandaID == currentUser.KomandosId).Include(t => t.Nariai).FirstOrDefault();
             return View(team);
         }
 
@@ -158,7 +189,7 @@ namespace WebApplication3.Controllers
         {
         
             if (ModelState.IsValid) {
-                ViewBag.TeamId = komanda.KomandaID;
+                ViewData["TeamId"] = komanda.KomandaID;
                 var foundUsers = _context.Users.Where(u => u.FullName == komanda.SearchForPlayers).Where(u => u.KomandosId == 0).ToList();
                 return View(foundUsers);
             }
@@ -209,15 +240,57 @@ namespace WebApplication3.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult Invite(int id, ApplicationUser user) {
-            if (ModelState.IsValid)
+        [ActionName("Invite")]
+        public IActionResult Invite(string Id, int teamId)
+        {
+            
+            Pakvietimas invite = new Pakvietimas { komandosId = teamId, vartotojoId = Id };
+            _context.Pakvietimas.Add(invite);
+            ApplicationUser user = _context.Users
+                .Where(x => x.Id == Id)
+                .FirstOrDefault();
+            if (user.Pakvietimai == null)
             {
-                Pakvietimas invite = new Pakvietimas { komandosId = id, vartotojoId = user.Id };
-                _context.Pakvietimas.Add(invite);
-                _context.SaveChanges();
+                user.Pakvietimai = new List<Pakvietimas>();
             }
+            user.Pakvietimai.Add(invite);
+            _context.SaveChanges();
+          
             return RedirectToAction("TeamView");
+        }
+
+
+        [ActionName("RemoveUser")]
+        public IActionResult RemoveUser(string userId)
+        {
+            ApplicationUser user = _context.Users.Where(u => u.Id == userId).FirstOrDefault();
+            Komanda team = _context.Komanda.Where(t => t.KomandaID == user.KomandosId).FirstOrDefault();
+            team.Nariai.Remove(user);
+            user.KomandosId = 0;
+            _context.Update(user);
+            _context.Update(team);
+            _context.SaveChanges();
+            return RedirectToAction("TeamView");
+        }
+
+        [ActionName("DeleteTeam")]
+        public IActionResult DeleteTeam(int id)
+        {
+
+          //  await _rolesHelper.removeRoles(User.Identity.Name, new List<string>() { Roles.kapitonas });
+            Komanda team = _context.Komanda.Where(t => t.KomandaID == id).Include(t => t.Nariai).FirstOrDefault();
+            List<ApplicationUser> players = _context.Users.Where(u => u.KomandosId == id).ToList();
+            if (players != null)
+            {
+                foreach (ApplicationUser player in players)
+                {
+                    player.KomandosId = 0;
+                    _context.Update(player);
+                }
+            }
+            _context.Remove(team);
+            _context.SaveChanges();
+            return RedirectToAction("index");
         }
     }
 
