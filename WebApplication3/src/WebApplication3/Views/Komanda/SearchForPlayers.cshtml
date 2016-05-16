@@ -11,16 +11,17 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)            
-            </td>
-            <td>
-                <a asp-action="Invite" asp-route-id="@ViewBag.TeamId">Pakviesti</a> |
-            </td>
-        </tr>
+         
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    <a asp-action="Invite" asp-route-id="@item.Id" asp-route-teamId="@ViewData["TeamId"]" class="btn btn-info" role="button">Pakviesti</a>
+                </td>
+           </tr>
     }
 </table>

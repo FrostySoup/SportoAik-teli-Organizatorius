@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.AspNet.Authentication.Facebook;
 using WebApplication3.Helpers;
+using WebApplication3.Models.TurnyroModeliai;
+using WebApplication3.Models.VartotojoModeliai;
 
 namespace WebApplication3.Controllers
 {
@@ -139,6 +141,22 @@ namespace WebApplication3.Controllers
         }
 
 
+        public IActionResult UserInvitations()
+        {
+            ApplicationUser user = _context.Users
+                .Where(x => x.Email == User.Identity.Name)
+                .FirstOrDefault();
+            List<Pakvietimas> invites = new List<Pakvietimas>();
+            invites = _context.Pakvietimas.Where(i => i.vartotojoId == user.Id).ToList();
+            List<Komanda> teams = new List<Komanda>();
+                foreach (Pakvietimas invitation in invites)
+                {
+                    Komanda team = _context.Komanda.Where(t => t.KomandaID == invitation.komandosId).FirstOrDefault();
+                    teams.Add(team);
+                }
+            return View(teams);
+        }
+
         //
         // POST: /Account/ExternalLogin
         [HttpPost]
@@ -261,6 +279,8 @@ namespace WebApplication3.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View(model);
         }
+
+
 
 
         private void AddErrors(IdentityResult result)

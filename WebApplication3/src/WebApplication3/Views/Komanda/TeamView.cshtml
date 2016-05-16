@@ -1,8 +1,10 @@
 ﻿@model WebApplication3.Models.TurnyroModeliai.Komanda
+@using WebApplication3.Models.Identity;
+@using System.Security.Principal
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Komanda "@Html.DisplayNameFor(model => model.Pavadinimas)"</h3>
+            <h3 class="panel-title">Komanda "@Model.Pavadinimas"</h3>
         </div>
         <div class="panel-body">
             <div class="row">
@@ -12,7 +14,7 @@
                         <li class="list-group-item">
                             Pavadinimas:<span class="pull-right text-success">
                                 <strong>
-                                    "@Html.DisplayNameFor(model => model.Pavadinimas)"
+                                    "@Model.Pavadinimas"
                                 </strong>
                             </span>
                         </li>
@@ -20,11 +22,11 @@
                         <a href="#" class="list-group-item">
                             Kapitonas:<span class="pull-right">
                                 <strong>
-                                    @Html.DisplayNameFor(model => model.Kapitonas.FullName)
+                                   @Model.Kapitonas.FullName
                                 </strong>
                             </span>
                         </a>
-                        <a href="#" class="list-group-item">Žaidėjų skaičius:<span class="pull-right"><strong>@Html.DisplayNameFor(model => model.Nariai.Count)</strong></span></a>
+                        <a href="#" class="list-group-item">Žaidėjų skaičius:<span class="pull-right"><strong>@Model.Nariai.Count</strong></span></a>
                         <li class="list-group-item">
                             Komandos sukūrimo data:<span class="pull-right"><strong>2016-03-19</strong></span>
                         </li>
@@ -36,32 +38,26 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-xs-12 col-md-6">
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-info">Komandos žaidėjai</li>
-                        <a href="#" class="list-group-item team-member">
-                            Andrius Rimkus
-                            <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
-                                    data-target="#myModal">
-                                Šalinti [kapitonas]
-                            </button>
-                        </a>
-                        <a href="#" class="list-group-item team-member">
-                            Giedrius Verbyla
-                            <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
-                                    data-target="#myModal">
-                                Šalinti [kapitonas]
-                            </button>
-                        </a>
-                        <a href="#" class="list-group-item team-member">
-                            Deividas Leonavičius
-                            <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
-                                    data-target="#myModal">
-                                Šalinti [kapitonas]
-                            </button>
-                        </a>
-                    </ul>
 
+                <div class="col-xs-12 col-md-6">
+                 @if (Model.Nariai.Count > 0)
+                 {
+                    <ul class="list-group">
+                        @foreach (ApplicationUser user in Model.Nariai)
+                        {
+                        <li class="list-group-item list-group-item-info">Komandos žaidėjai</li>
+                        <li class="list-group-item team-member">
+                            @user.FullName
+                            @if (User.IsInRole("kapitonas"))
+                            {
+                                <a asp-action="RemoveUser" asp-route-userId="@user.Id" class="btn btn-info" role="button">Šalinti</a>
+                            }
+                        </li>
+                        }
+                    </ul>
+                 }
+                    @if (User.IsInRole("kapitonas"))
+                    {
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Pridėti žaidėja</h3>
@@ -72,13 +68,18 @@
                                 <div class="form-group">
                                     <input asp-for="SearchForPlayers" class="form-control" placeholder="Įvesti žaidėjo vardą">
                                     <span class="input-group-btn">
-                                        <input type="submit" class="btn btn-default" value="Ieškoti" />
+                                        <input type="submit" class="btn btn-info" value="Ieškoti" />
                                     </span>
                                 </div>
                             </form>
                         </div>
                     </div>
+                    }
+                    @if (User.IsInRole("kapitonas"))
+                    {
+                        <a asp-action="DeleteTeam" asp-route-id="@Model.KomandaID" class="btn btn-danger" style="margin-bottom: 20px;" role="button">Naikinti komandą</a>
 
+                    }
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active">
                             <a href="#profile" role="tab" data-toggle="tab">

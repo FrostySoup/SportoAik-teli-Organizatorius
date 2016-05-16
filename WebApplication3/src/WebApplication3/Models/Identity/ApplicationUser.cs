@@ -19,7 +19,7 @@ namespace WebApplication3.Models.Identity
 
         public int KomandosId { get; set; }
 
-       // [ForeignKey("KomandosId")]
+        // [ForeignKey("KomandosId")]
         //public virtual Komanda komanda { get; set; }
 
         public ICollection<AikstelesVertinimas> Vertinimai { get; set; }

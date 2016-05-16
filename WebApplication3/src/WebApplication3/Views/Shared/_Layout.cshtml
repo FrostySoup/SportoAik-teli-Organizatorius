@@ -60,6 +60,7 @@
                         <ul class="dropdown-menu">
                             @if (User.Identity.IsAuthenticated)
                             {
+                                <li><a asp-controller="Account" asp-action="UserInvitations">Pakvietimai</a></li>
                                 <li><a href="#" id="logout_btn">Atsijungti</a></li>
                             }
                             else
