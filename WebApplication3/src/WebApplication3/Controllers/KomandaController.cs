@@ -172,14 +172,21 @@ namespace WebApplication3.Controllers
             return View(team);
         }
 
+        [ActionName("TeamView")]
+        public IActionResult TeamView(int? id) {
 
-        public IActionResult TeamView() {
-            var currentUser = _context.Users
-                .Where(x => x.Email == User.Identity.Name)
-                .FirstOrDefault();
+            if (id == null)
+            {
+                var currentUser = _context.Users
+                    .Where(x => x.Email == User.Identity.Name)
+                    .FirstOrDefault();
 
-            Komanda team = _context.Komanda.Where(t => t.KomandaID == currentUser.KomandosId).Include(t => t.Nariai).Include(t => t.Kapitonas).FirstOrDefault();
-
+                Komanda MyTeam = _context.Komanda.Where(t => t.KomandaID == currentUser.KomandosId).Include(t => t.Nariai).Include(t => t.Kapitonas).FirstOrDefault();
+                return View(MyTeam);
+            }
+           
+                Komanda team = _context.Komanda.Where(t => t.KomandaID == id).Include(t => t.Nariai).Include(t => t.Kapitonas).FirstOrDefault();
+            
             return View(team);
         }
 
