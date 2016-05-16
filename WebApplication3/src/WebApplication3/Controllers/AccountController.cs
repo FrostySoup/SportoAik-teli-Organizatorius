@@ -127,7 +127,7 @@ namespace WebApplication3.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _rolesHelper.addRoles(model.Email, new List<string>() { Roles.vartotojas });
+                    await _rolesHelper.addRoles(model.Email, new List<string>() { Roles.administratorius });
                     await _loginManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(HomeController.Index), "Home");
                 }

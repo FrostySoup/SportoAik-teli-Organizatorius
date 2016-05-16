@@ -1,4 +1,6 @@
-@model WebApplication3.Models.AikstelesModeliai.Renginys
+﻿@model WebApplication3.Models.AikstelesModeliai.Renginys
+@using WebApplication3.Models.Identity
+
 @{
     ViewData["Title"] = "Detalės";
 }
@@ -40,9 +42,11 @@
         </div>
     </nav>
     <div class="container">
-        <!--<div class="alert alert-danger">-->
-        <!--<strong>Dėmesio!</strong> Prisijungti prie varžybų gali tik registruoti vartotojai.-->
-        <!--</div>-->
+        <ol class="breadcrumb">
+            <li><a href="../../">Pradzia</a></li>
+            <li><a href="../index">Renginiai</a></li>
+            <li class="active">Kalantos gatves aikstele</li>
+        </ol>
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Varžybos</h3>
@@ -53,7 +57,7 @@
                         <ul class="list-group">
                             <li class="list-group-item list-group-item-info">Pagrindinė renginio informacija</li>
                             <li class="list-group-item">Statusas:<span class="pull-right text-success">@Html.DisplayNameFor(model => model.ArPrasidejo)</span></li>
-                            <li href="../zaidejas/zaidejas.html" class="active-row list-group-item">Paskelbė:<span class="pull-right"><strong>@User.Identity.Name</strong></span></li>
+                            <li href="../zaidejas/zaidejas.html" class="active-row list-group-item">Paskelbė:<span class="pull-right"><strong>@if (ViewData["Email"] != null){ @Html.Raw((string)ViewData["Email"]) }</strong></span></li>
                             <li class="list-group-item">Reginio pradžios laikas:<span class="pull-right"><strong>@Html.DisplayFor(model => model.Data)</strong></span></li>
                             <li href="../aikstele/aikstele.html" class="active-row list-group-item">Reginio aikštelė:<span class="pull-right"><strong>Kalantos gatvės aikštelė, Kaunas</strong><span class="glyphicon glyphicon-zoom-in playground-icon" aria-hidden="true"></span></span></li>
                             <li class="list-group-item">Sporto šaka:<span class="pull-right"><strong>@Html.DisplayFor(model => model.SportoSaka)</strong></span></li>
@@ -62,17 +66,31 @@
                         </ul>
                     </div>
                     <div class="col-xs-12 col-md-6">
-                        <ul class="list-group">
-                            <li class="list-group-item list-group-item-info">Prisijungę žaidėjai</li>
-                            <li href="../zaidejas/zaidejas.html" class="active-row list-group-item">Andrius Rimkus</li>
-                            <li href="#" class="list-group-item">Giedrius Verbyla</li>
-                            <li href="#" class="list-group-item">Deividas Leonavičius</li>
-                        </ul>
-                        <form asp-action="Prisijungti">
-                            <div class="form-actions no-color">
-                                <input type="submit" value="Prisijungti" class="btn btn-default" /> 
-                            </div>
-                        </form>
+                        @{
+                            if (ViewData["Users"] != null)
+                            {
+                                <ul class="list-group">
+                                    <li class="list-group-item list-group-item-info">Prisijungę žaidėjai</li>
+                                    @foreach (ApplicationUser a in (IEnumerable<ApplicationUser>)ViewData["Users"])
+                                    {
+                                        <li class="list-group-item">
+                                            @Html.DisplayFor(modelItem => a.Email)
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+                        @if (User.Identity.IsAuthenticated && ViewData["Join"] != null)
+                        {
+                            @if ((bool)ViewData["Join"] == true)
+                            {
+                                <a asp-action="Prisijungti" asp-route-id="@Model.RenginysID">Prisijungti</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Nedalyvauti" asp-route-id="@Model.RenginysID">Nedalyvauti</a>
+                            }
+                        }
                     </div>
                 </div>
             </div>
@@ -84,7 +102,6 @@
         <p>IFF-3/2 studentai. Gatvės lyga. 2015</p>
     </div>
     <p>
-        <a asp-action="Edit" asp-route-id="@Model.RenginysID">Edit</a> |
         <a asp-action="Index">Back to List</a>
     </p>
 </body>

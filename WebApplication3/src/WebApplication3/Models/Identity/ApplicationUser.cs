@@ -28,6 +28,6 @@ namespace WebApplication3.Models.Identity
         public ICollection<Komentaras> UserComments { get; set; }
 
         public List<UserRenginys> UserRenginys { get; set; }
-
     }
 }
+
