@@ -26,6 +26,5 @@ namespace WebApplication3.Models.Identity
         public ICollection<AikstelesKomentaras> Komentarai { get; set; }
         public ICollection<Pakvietimas> Pakvietimai { get; set; }
         public List<UserRenginys> UserRenginys { get; set; }
-        public Komanda Komanda;
     }
 }
