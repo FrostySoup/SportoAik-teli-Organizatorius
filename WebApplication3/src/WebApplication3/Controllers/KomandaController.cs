@@ -7,9 +7,9 @@ using WebApplication3.Models.TurnyroModeliai;
 using WebApplication3.Models.VartotojoModeliai;
 using WebApplication3.Helpers;
 using Microsoft.AspNet.Identity;
-
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
 
 namespace WebApplication3.Controllers
 {
@@ -80,7 +80,7 @@ namespace WebApplication3.Controllers
                   
                     Komanda team = new Komanda { Kapitonas = komanda.Kapitonas, Pavadinimas = komanda.Pavadinimas };
                     await _rolesHelper.addRoles(User.Identity.Name, new List<string>() { Roles.kapitonas });
-                    komanda.Nariai.Add(currentUser);
+                    //komanda.Nariai.Add(currentUser);
                     _context.Komanda.Add(komanda);
                     
                     _context.SaveChanges();
@@ -274,10 +274,10 @@ namespace WebApplication3.Controllers
         }
 
         [ActionName("DeleteTeam")]
-        public IActionResult DeleteTeam(int id)
+        public async Task<IActionResult> DeleteTeam(int id)
         {
 
-          //  await _rolesHelper.removeRoles(User.Identity.Name, new List<string>() { Roles.kapitonas });
+            await _rolesHelper.removeRoles(User.Identity.Name, new List<string>() { Roles.kapitonas });
             Komanda team = _context.Komanda.Where(t => t.KomandaID == id).Include(t => t.Nariai).FirstOrDefault();
             List<ApplicationUser> players = _context.Users.Where(u => u.KomandosId == id).ToList();
             if (players != null)

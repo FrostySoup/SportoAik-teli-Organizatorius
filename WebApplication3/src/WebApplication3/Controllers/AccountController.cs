@@ -42,6 +42,15 @@ namespace WebApplication3.Controllers
             _rolesHelper = new RolesHelper(secMgr, context);
         }
 
+        [ActionName("UserProfile")]
+        public IActionResult UserProfile(string id)
+        {
+            ApplicationUser user = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+
+
+            return View(user);
+        }
+
         //3
         [HttpGet]
         [AllowAnonymous]
@@ -205,15 +214,16 @@ namespace WebApplication3.Controllers
                 if (email != null)
                 {
                     var user = new ApplicationUser { FullName = name ,UserName = email, Email = email };
-
-                   /* var store = new RoleStore<IdentityRole>(_context);
-                    var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
-                    await manager.CreateAsync(new IdentityRole { Name = "svecias" });
-                    await manager.CreateAsync(new IdentityRole { Name = "vartotojas" });
-                    await manager.CreateAsync(new IdentityRole { Name = "kurejas" });
-                    await manager.CreateAsync(new IdentityRole { Name = "kapitonas" });
-                    await manager.CreateAsync(new IdentityRole { Name = "administratorius" });*/
-
+                    if (!_context.Roles.Any(r => r.Name == "svecias"))
+                    {
+                        var store = new RoleStore<IdentityRole>(_context);
+                        var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
+                        await manager.CreateAsync(new IdentityRole { Name = "svecias" });
+                        await manager.CreateAsync(new IdentityRole { Name = "vartotojas" });
+                        await manager.CreateAsync(new IdentityRole { Name = "kurejas" });
+                        await manager.CreateAsync(new IdentityRole { Name = "kapitonas" });
+                        await manager.CreateAsync(new IdentityRole { Name = "administratorius" }); 
+                    }
                     var result2 = await _securityManager.CreateAsync(user);
                     if (result2.Succeeded)
                     {
@@ -221,6 +231,7 @@ namespace WebApplication3.Controllers
                         result2 = await _securityManager.AddLoginAsync(user, info);
                         if (result2.Succeeded)
                         {
+                            await _rolesHelper.addRoles(email, new List<string>() { Roles.vartotojas });
                             await _loginManager.SignInAsync(user, isPersistent: false);
                             _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
                             return RedirectToAction("Index", "Home");
