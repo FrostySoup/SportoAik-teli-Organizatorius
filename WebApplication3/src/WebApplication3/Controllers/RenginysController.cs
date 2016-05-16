@@ -8,6 +8,7 @@ using Microsoft.AspNet.Authorization;
 using static WebApplication3.DataHelpers.Sportas;
 using WebApplication3.DataHelpers;
 using System;
+using WebApplication3.Helpers;
 
 namespace WebApplication3.Controllers
 {
@@ -23,7 +24,7 @@ namespace WebApplication3.Controllers
         // GET: Renginys
         public IActionResult Index()
         { 
-            return View(_context.Renginiai.ToList());
+            return View(_context.Renginiai.Include(a => a.Aikstele).ToList());
         }
 
         [Authorize]
@@ -48,15 +49,10 @@ namespace WebApplication3.Controllers
             {
                 return HttpNotFound();
             }
-
-            var email = _context.Users
-                .Where(x => x.Id == renginys.RenginioAutoriausID)
-                .First().Email;
-            var users =
-                from r in _context.Renginiai
-                from u in _context.Users
-                where r.RenginysID == id
-                select u;
+            TupleBoolUser renginioVartotojai = RenginiuServices.checkJoin(_context, User.Identity.Name, id);
+            ViewData["Join"] = renginioVartotojai.canUse;
+            ViewData["Users"] = renginioVartotojai.Users;
+            ViewData["Email"] = _context.Users.Where(x => x.Id == renginys.RenginioAutoriausID).First().Email;
             return View(renginys);
         }
 
@@ -64,6 +60,7 @@ namespace WebApplication3.Controllers
         [Authorize]
         public IActionResult Create()
         {
+            ViewData["Aiksteles"] = _context.Aiksteles.Where(a => a.ArPatvirtinta == true).ToList();
             return View();
         }
 
@@ -81,7 +78,8 @@ namespace WebApplication3.Controllers
                 int saka = -1;
                 if (System.Int32.TryParse(renginys.SportoSaka, out saka)){
                     renginys.SportoSaka = Sportas.Zaidimas(saka);
-                }             
+                }
+                renginys.Aikstele = _context.Aiksteles.Where(x => x.AiksteleID == renginys.Aikstele.AiksteleID).First();
                 renginys.RenginioAutoriausID = currentUser.Id;
                 renginys.ArPrasidejo = false;
                 if (ModelState.IsValid && saka >= 0)
@@ -161,24 +159,17 @@ namespace WebApplication3.Controllers
 
 
         [Authorize]
-        [HttpPost, ActionName("Prisijungti")]
+        // POST: Renginys/Prisijungti/5
+        [ActionName("Prisijungti")]
         public IActionResult Prisijungti(string id)
         {
             Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
             var currentUser = _context.Users
                 .Where(x => x.Email == User.Identity.Name)
                 .FirstOrDefault();
-            bool canJoin = true;
-            var user =
-                from r in _context.Renginiai
-                from u in _context.Users
-                where r.RenginysID == renginys.RenginysID
-                select u;
-            foreach (ApplicationUser u in user)
-            {
-                if (u.Id.Equals(currentUser))
-                    canJoin = false;
-            }
+
+            TupleBoolUser renginioVartotojai = RenginiuServices.checkJoin(_context, User.Identity.Name, id);
+            bool canJoin = renginioVartotojai.canUse;
             if (canJoin) {
                 if (renginys.UserRenginys == null)
                     renginys.UserRenginys = new System.Collections.Generic.List<UserRenginys>();
@@ -193,5 +184,23 @@ namespace WebApplication3.Controllers
             
             return RedirectToAction("Index");
         }
+
+        [Authorize]
+        // POST: Renginys/Nedalyvauti/5
+        [ActionName("Nedalyvauti")]
+        public IActionResult Nedalyvauti(string id)
+        {
+            var currentUser = _context.Users
+                .Where(x => x.Email == User.Identity.Name)
+                .Include(x => x.UserRenginys)
+                .FirstOrDefault();
+            UserRenginys user = currentUser.UserRenginys.Where(x => x.RenginysId == id).First();
+            currentUser.UserRenginys.Remove(user);
+            _context.Users.Update(currentUser);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

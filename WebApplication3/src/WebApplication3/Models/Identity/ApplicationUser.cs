@@ -23,9 +23,8 @@ namespace WebApplication3.Models.Identity
         //public virtual Komanda komanda { get; set; }
 
         public ICollection<AikstelesVertinimas> Vertinimai { get; set; }
-        public ICollection<AikstelesKomentaras> Komentarai { get; set; }
         public ICollection<Pakvietimas> Pakvietimai { get; set; }
-        public List<UserRenginys> UserRenginys { get; set; }
+        public ICollection<UserRenginys> UserRenginys { get; set; }
         public Komanda Komanda;
     }
 }

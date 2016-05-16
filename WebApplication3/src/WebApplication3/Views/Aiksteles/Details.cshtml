@@ -14,42 +14,80 @@
 </head>
 <body>
 
-<div>
-    <h4>Aikstele</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Adresas)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Adresas)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ArPatvirtinta)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ArPatvirtinta)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LatY)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LatY)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LongX)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LongX)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Miestas)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Miestas)
-        </dd>
-    </dl>
-</div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Gatves lyga</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">Paskyra<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Prisijungti</a></li>
+                            <li><a href="#">Registruotis</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="../../">Pradzia</a></li>
+            <li><a href="../index">Aiksteles</a></li>
+            <li class="active">Kalantos gatves aikstele</li>
+        </ol>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Kalantos gatves aikstele</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div id="map"></div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-info">Aiksteles informacija</li>
+                            <li class="list-group-item">Adresas: <span class="pull-right"><strong>@Html.DisplayFor(model => model.Adresas)</strong></span></li>
+                            <li class="list-group-item">Miestas: <span class="pull-right"><strong>@Html.DisplayFor(model => model.Miestas)</strong></span></li>
+                            <li class="list-group-item">Reitingas:<input id="input-id" value="4" class="rating-loading"></li>
+                        </ul>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <strong>Andrius Rimkus</strong> <span class="text-muted">komentavo prieš 5 dienas</span>
+                            </div>
+                            <div class="panel-body">
+                                Normaliai visai.
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <strong>Deividas Leonavi?ius</strong> <span class="text-muted">komentavo prieš 5 dienas</span>
+                            </div>
+                            <div class="panel-body">
+                                Nekrito visai. Bloga aikštel?.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success pull-right m-l-10" data-toggle="modal" data-target="#myModal">
+                    Komentuoti
+                    [registruotas]
+                </button>
+            </div>
+        </div>
+    </div>
+
 <p>
     <a asp-action="Edit" asp-route-id="@Model.AiksteleID">Edit</a> |
     <a asp-action="Index">Back to List</a>

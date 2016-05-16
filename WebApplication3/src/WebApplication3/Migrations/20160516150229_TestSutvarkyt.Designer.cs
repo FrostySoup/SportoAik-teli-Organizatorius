@@ -8,9 +8,10 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160516150229_TestSutvarkyt")]
+    partial class TestSutvarkyt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -121,11 +122,11 @@ namespace WebApplication3.Migrations
 
                     b.Property<string>("AiksteleAiksteleID");
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<DateTime>("Data");
 
                     b.Property<string>("Komentaras");
-
-                    b.Property<string>("UserName");
 
                     b.HasKey("AikstelesKomentarasID");
                 });
@@ -334,6 +335,10 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.AikstelesModeliai.Aikstele")
                         .WithMany()
                         .HasForeignKey("AiksteleAiksteleID");
+
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.AikstelesVertinimas", b =>

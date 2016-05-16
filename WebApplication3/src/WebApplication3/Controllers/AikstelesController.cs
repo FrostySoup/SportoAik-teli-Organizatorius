@@ -8,6 +8,7 @@ using Microsoft.AspNet.Authorization;
 using System.Collections.Generic;
 using System;
 using WebApplication3.DataHelpers;
+using Microsoft.AspNet.Identity;
 
 namespace WebApplication3.Controllers
 {
@@ -23,7 +24,19 @@ namespace WebApplication3.Controllers
         // GET: Aiksteles
         public IActionResult Index()
         {
-            return View(_context.Aiksteles.ToList());
+            var currentUser = _context.Users
+                .Where(x => x.Email == User.Identity.Name)
+                .FirstOrDefault();
+            List<Aikstele> aiksteles;
+
+            if (User.IsInRole("administratorius"))
+            {
+                aiksteles = _context.Aiksteles.ToList();
+            }
+            else
+                aiksteles = _context.Aiksteles.Where(x => x.ArPatvirtinta == true).ToList();
+
+            return View(aiksteles);
         }
 
         [HttpGet("AikstelesMap")]
@@ -32,7 +45,7 @@ namespace WebApplication3.Controllers
             List<AiksteleMap> aiksteles = new List<AiksteleMap>();
             try
             {
-                var dbAiksteles = _context.Aiksteles.Where(x => x.ArPatvirtinta == false).ToList();
+                var dbAiksteles = _context.Aiksteles.Where(x => x.ArPatvirtinta == true).ToList();
                 foreach (var aikstele in dbAiksteles)
                 {
                     aiksteles.Add(new AiksteleMap(aikstele));
