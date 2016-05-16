@@ -26,4 +26,5 @@ namespace WebApplication3.Models.Identity
         public ICollection<Pakvietimas> Pakvietimai { get; set; }
         public ICollection<UserRenginys> UserRenginys { get; set; }
     }
+}
 
