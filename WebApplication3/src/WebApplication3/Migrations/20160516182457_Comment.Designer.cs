@@ -8,9 +8,10 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160516182457_Comment")]
+    partial class Comment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -121,11 +122,11 @@ namespace WebApplication3.Migrations
 
                     b.Property<string>("AiksteleAiksteleID");
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<DateTime>("Data");
 
                     b.Property<string>("Komentaras");
-
-                    b.Property<string>("UserName");
 
                     b.HasKey("AikstelesKomentarasID");
                 });
@@ -283,24 +284,6 @@ namespace WebApplication3.Migrations
                     b.HasKey("KomandaID", "TurnyrasID");
                 });
 
-            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>
-                {
-                    b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<string>("Comment");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<string>("commentedUser");
-
-                    b.Property<string>("userId");
-
-                    b.HasKey("CommentId");
-                });
-
             modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>
                 {
                     b.Property<int>("Id")
@@ -352,6 +335,10 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.AikstelesModeliai.Aikstele")
                         .WithMany()
                         .HasForeignKey("AiksteleAiksteleID");
+
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.AikstelesVertinimas", b =>
@@ -420,13 +407,6 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.TurnyroModeliai.Turnyras")
                         .WithMany()
                         .HasForeignKey("TurnyrasID");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>
-                {
-                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>

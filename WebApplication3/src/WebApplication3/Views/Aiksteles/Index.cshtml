@@ -24,7 +24,7 @@
         <th>
             @Html.DisplayNameFor(model => model.Adresas)
         </th>
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Administratorius"))
+        @if (User.Identity.IsAuthenticated && User.IsInRole("administratorius"))
         {
             <th>
                 @Html.DisplayNameFor(model => model.ArPatvirtinta)
@@ -42,7 +42,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.Adresas)
         </td>
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Administratorius"))
+        @if (User.Identity.IsAuthenticated && User.IsInRole("administratorius"))
         {
             <td>
                 @Html.DisplayFor(modelItem => item.ArPatvirtinta)
@@ -52,11 +52,11 @@
             @Html.DisplayFor(modelItem => item.Miestas)
         </td>
         <td>
-            @if (User.Identity.IsAuthenticated && User.IsInRole("Administratorius"))
+            @if (User.Identity.IsAuthenticated && User.IsInRole("administratorius"))
             {
 
                 <a asp-action="Edit" asp-route-id="@item.AiksteleID">Redaguoti</a> 
-                <a asp-action= "Delete" asp-route-id = "@item.AiksteleID"> Pašalinti </a>
+                <a asp-action= "Delete" asp-route-id = "@item.AiksteleID"> Pasalinti </a>
              }
                 <a asp-action="Details" asp-route-id="@item.AiksteleID">Informacija</a>
         </td>

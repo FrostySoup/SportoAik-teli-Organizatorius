@@ -14,7 +14,7 @@ namespace WebApplication3.Models.AikstelesModeliai
         public DateTime Data { get; set; }
         public string Komentaras { get; set; }
 
-        public ApplicationUser ApplicationUser { get; set; }
+        public string UserName { get; set; }
         public Aikstele Aikstele { get; set; }
     }
 }

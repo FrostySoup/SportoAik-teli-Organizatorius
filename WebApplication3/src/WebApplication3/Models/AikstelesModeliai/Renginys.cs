@@ -25,7 +25,7 @@ namespace WebApplication3.Models.AikstelesModeliai
         public bool ArPrasidejo { get; set; }
 
         [Required]
-        [Range(1, 20, ErrorMessage = "Minimalus žaidėjų kiekis 1, maksimalus 40")]
+        [Range(1, 40, ErrorMessage = "Minimalus žaidėjų kiekis 1, maksimalus 40")]
         [Display(Name = "Žaidėjų skaičius")]
         public int ZaidejuKiekis { get; set; }
 
@@ -33,6 +33,6 @@ namespace WebApplication3.Models.AikstelesModeliai
 
         public Aikstele Aikstele { get; set; }
 
-        public List<UserRenginys> UserRenginys { get; set; }
+        public ICollection<UserRenginys> UserRenginys { get; set; }
     }
 }

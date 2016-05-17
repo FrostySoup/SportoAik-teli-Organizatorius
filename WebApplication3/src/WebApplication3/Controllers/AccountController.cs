@@ -45,10 +45,48 @@ namespace WebApplication3.Controllers
         [ActionName("UserProfile")]
         public IActionResult UserProfile(string id)
         {
+            ApplicationUser user = _context.Users.Where(u => u.Id == id).Include(u => u.UserComments).FirstOrDefault();
+            Komentaras comment = new Komentaras();
+            UserProfileViewModel UserModel = new UserProfileViewModel { users = user, comment = comment };
+
+            return View(UserModel);
+        }
+
+        public IActionResult CommentPlayer(UserProfileViewModel UserModel)
+        {
+
+            ApplicationUser commentUser = _context.Users.Where(u => u.Id == UserModel.users.Id).FirstOrDefault();
+            ApplicationUser user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+           
+            Komentaras comment = new Komentaras { Comment = UserModel.comment.Comment, commentedUser = commentUser.Id, userId = user.Id, user = user, Date = DateTime.Now };
+            if (commentUser.UserComments == null)
+            {
+                commentUser.UserComments = new List<Komentaras>();
+            }
+            commentUser.UserComments.Add(comment);
+            _context.Komentaras.Add(comment);
+            _context.SaveChanges();
+            return RedirectToAction("UserProfile", new { id = commentUser.Id });
+        }
+
+        [ActionName("LeaveTeam")]
+        public IActionResult LeaveTeam(string id)
+        {
             ApplicationUser user = _context.Users.Where(u => u.Id == id).FirstOrDefault();
 
+            Komanda team = _context.Komanda.Where(t => t.KomandaID == user.KomandosId).FirstOrDefault();
 
-            return View(user);
+            if(team.Nariai == null)
+            {
+                team.Nariai = new List<ApplicationUser>();
+            }
+
+            team.Nariai.Remove(user);
+            user.KomandosId = 0;
+            _context.Update(user);
+            _context.Update(team);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Home");
         }
 
         //3
@@ -89,7 +127,7 @@ namespace WebApplication3.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _rolesHelper.addRoles(model.Email, new List<string>() { Roles.vartotojas });
+                    await _rolesHelper.addRoles(model.Email, new List<string>() { Roles.administratorius });
                     await _loginManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(HomeController.Index), "Home");
                 }

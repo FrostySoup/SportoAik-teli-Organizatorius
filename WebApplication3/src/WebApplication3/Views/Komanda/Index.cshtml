@@ -8,13 +8,13 @@
 @{ if (ViewBag.KomandosId == 0)
     {
         <p>
-            <a asp-action="Create">Sukurti komandà</a>
+            <a asp-action="Create" class="btn btn-info">Sukurti komanda</a>
         </p>
     }
     else
     {
         <p>
-            <a asp-action="TeamView">Tavo komandà</a>
+            <a asp-action="TeamView" class="btn btn-info">Tavo komanda</a>
         </p>
     }
 }
@@ -33,12 +33,9 @@
             @Html.DisplayFor(modelItem => item.Pavadinimas)
         </td>
         <td>
-            <a asp-action="Join" asp-route-id="@item.KomandaID" class="btn btn-info" role="button">Prisijungti</a>
+            <a asp-action="TeamView" asp-route-id="@item.KomandaID" class="btn btn-info" role="button">Perziureti</a>
         </td>
         <td>
-            <a asp-action="Edit" asp-route-id="@item.KomandaID">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.KomandaID">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.KomandaID">Delete</a>
         </td>
     </tr>
 }
