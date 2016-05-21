@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using WebApplication3.Services;
+using WebApplication3.ViewModel.TurnyroViewModeliai;
 
 namespace WebApplication3.Controllers
 {
@@ -26,9 +27,11 @@ namespace WebApplication3.Controllers
         }
 
         // GET: Turnyras
-        public IActionResult Index()
+        public IActionResult Index(int? type)
         {
-            return View(_context.Turnyras.ToList());
+            var ViewModel = new IndexViewModel() { Turnyrai = _context.Turnyras.ToList(), Type = type };
+
+            return View(ViewModel);
         }
 
         // GET: Turnyras/Details/5
