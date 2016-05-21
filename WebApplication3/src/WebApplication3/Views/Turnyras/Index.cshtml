@@ -1,7 +1,7 @@
 ﻿@model WebApplication3.ViewModel.TurnyroViewModeliai.IndexViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gatvės Sporto Organizatorius - Turnyrai";
 }
 
 <ol class="breadcrumb">
@@ -28,40 +28,46 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Turnyrai.First().KomanduKiekis)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Turnyrai.First().Pavadinimas)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Turnyrai.First().TurnyroBusena)
+                @Html.DisplayNameFor(model => model.Turnyrai.First().TurnyroSportoSaka)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Turnyrai.First().TurnyroAutorius)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Turnyrai.First().KomanduKiekis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Turnyrai.First().MinZaidejuKiekisKomandoje)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Turnyrai.First().TurnyroBusena)
+            </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Turnyrai)
         {
-            <tr>
+            <tr class="active-row" onclick="document.location = '@(Url.Action("Details", "Turnyras", new { id = item.TurnyrasID }))';">
+                <td>
+                    @Html.DisplayTextFor(modelItem => item.Pavadinimas)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TurnyroSportoSaka)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TurnyroAutorius.UserName)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.KomanduKiekis)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Pavadinimas)
+                    @Html.DisplayFor(modelItem => item.MinZaidejuKiekisKomandoje)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TurnyroBusena)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TurnyroAutorius.Email)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.TurnyrasID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.TurnyrasID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.TurnyrasID">Delete</a>
                 </td>
             </tr>
         }

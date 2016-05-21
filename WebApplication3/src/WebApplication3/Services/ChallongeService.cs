@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using WebApplication3.Services.ChallongeModels;
 using Flurl.Http;
@@ -14,29 +9,51 @@ namespace WebApplication3.Services
 {
     public class ChallongeService
     {
-        public static async Task AddTeam(Komanda komanda)
+        private const string apiKey = "LQaugevNzjBY1EoU7lfpvbyeyWFeUI6vWGP4tgWo";
+
+        public static string RandomString(int length)
         {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public static async Task AddTeam(Komanda komanda, string challongeAddress)
+        {
+            var address = "https://api.challonge.com/v1/tournaments/" + challongeAddress + "/participants.json";
             var participant = new ParticipantWrapper()
             {
-                ApiKey = "LQaugevNzjBY1EoU7lfpvbyeyWFeUI6vWGP4tgWo",
+                ApiKey = apiKey,
                 Participant = new Participant() { Name = komanda.Pavadinimas }
             };
 
-            var result = await "https://api.challonge.com/v1/tournaments/12321512/participants.json"
+            var result = await address
                 .PostJsonAsync(participant)
                 .ReceiveJson();
         }
 
-        public static async Task CreateTournament()
+        public static async Task<dynamic> CreateTournament(Turnyras turnyras)
         {
+            var tournamentUrl = RandomString(20);
             var tournament = new TournamentWrapper() {
-                ApiKey = "LQaugevNzjBY1EoU7lfpvbyeyWFeUI6vWGP4tgWo",
-                Tournament = new Tournament() { Name = "Pirmas turnyras", Url = "1232152112" }
+                ApiKey = apiKey,
+                Tournament = new Tournament() {
+                    Name = turnyras.Pavadinimas,
+                    SignupCap = turnyras.KomanduKiekis,
+                    HideForum = true,
+                    Private = true,
+                    Url = tournamentUrl,
+                }
             };
 
-            var result = await "https://api.challonge.com/v1/tournaments.json"
+            var request = await "https://api.challonge.com/v1/tournaments.json"
                 .PostJsonAsync(tournament)
                 .ReceiveJson();
+
+            //var json = JsonConvert.SerializeObject(request);
+
+            return request;
         }
     }
 }

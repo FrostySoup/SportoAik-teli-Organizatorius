@@ -8,8 +8,8 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20160514095020_AiksteliuLtTaidziuSalinimas")]
-    partial class AiksteliuLtTaidziuSalinimas
+    [Migration("20160521120456_challonge")]
+    partial class challonge
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -101,7 +101,7 @@ namespace WebApplication3.Migrations
 
             modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.Aikstele", b =>
                 {
-                    b.Property<string>("ID");
+                    b.Property<string>("AiksteleID");
 
                     b.Property<string>("Adresas");
 
@@ -113,14 +113,14 @@ namespace WebApplication3.Migrations
 
                     b.Property<string>("Miestas");
 
-                    b.HasKey("ID");
+                    b.HasKey("AiksteleID");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.AikstelesKomentaras", b =>
                 {
-                    b.Property<string>("ID");
+                    b.Property<string>("AikstelesKomentarasID");
 
-                    b.Property<string>("AiksteleID");
+                    b.Property<string>("AiksteleAiksteleID");
 
                     b.Property<string>("ApplicationUserId");
 
@@ -128,27 +128,29 @@ namespace WebApplication3.Migrations
 
                     b.Property<string>("Komentaras");
 
-                    b.HasKey("ID");
+                    b.Property<string>("UserName");
+
+                    b.HasKey("AikstelesKomentarasID");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.AikstelesVertinimas", b =>
                 {
-                    b.Property<string>("ID");
+                    b.Property<string>("AikstelesVertinimasID");
 
-                    b.Property<string>("AiksteleID");
+                    b.Property<string>("AiksteleAiksteleID");
 
                     b.Property<string>("ApplicationUserId");
 
                     b.Property<int>("Vertinimas");
 
-                    b.HasKey("ID");
+                    b.HasKey("AikstelesVertinimasID");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.Renginys", b =>
                 {
-                    b.Property<string>("ID");
+                    b.Property<string>("RenginysID");
 
-                    b.Property<string>("AiksteleID");
+                    b.Property<string>("AiksteleAiksteleID");
 
                     b.Property<bool>("ArPrasidejo");
 
@@ -161,7 +163,16 @@ namespace WebApplication3.Migrations
 
                     b.Property<int>("ZaidejuKiekis");
 
-                    b.HasKey("ID");
+                    b.HasKey("RenginysID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.UserRenginys", b =>
+                {
+                    b.Property<string>("RenginysId");
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.HasKey("RenginysId", "ApplicationUserId");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.Book", b =>
@@ -196,6 +207,12 @@ namespace WebApplication3.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FullName");
+
+                    b.Property<int?>("KomandaKomandaID");
+
+                    b.Property<int>("KomandosId");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -228,6 +245,82 @@ namespace WebApplication3.Migrations
                         .HasAnnotation("Relational:Name", "UserNameIndex");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Komanda", b =>
+                {
+                    b.Property<int>("KomandaID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("KapitonasId");
+
+                    b.Property<string>("Pavadinimas");
+
+                    b.Property<string>("SearchForPlayers");
+
+                    b.HasKey("KomandaID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Turnyras", b =>
+                {
+                    b.Property<int>("TurnyrasID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ChallongeAddress");
+
+                    b.Property<int>("KomanduKiekis");
+
+                    b.Property<string>("Pavadinimas")
+                        .IsRequired();
+
+                    b.Property<DateTime>("PrasidejimoData");
+
+                    b.Property<DateTime>("SukurimoData");
+
+                    b.Property<string>("TurnyroAutoriusId");
+
+                    b.Property<int>("TurnyroBusena");
+
+                    b.HasKey("TurnyrasID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.TurnyroDalyvis", b =>
+                {
+                    b.Property<int>("KomandaID");
+
+                    b.Property<int>("TurnyrasID");
+
+                    b.HasKey("KomandaID", "TurnyrasID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>
+                {
+                    b.Property<int>("CommentId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("commentedUser");
+
+                    b.Property<string>("userId");
+
+                    b.HasKey("CommentId");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<int>("komandosId");
+
+                    b.Property<string>("vartotojoId");
+
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
@@ -266,7 +359,7 @@ namespace WebApplication3.Migrations
                 {
                     b.HasOne("WebApplication3.Models.AikstelesModeliai.Aikstele")
                         .WithMany()
-                        .HasForeignKey("AiksteleID");
+                        .HasForeignKey("AiksteleAiksteleID");
 
                     b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
                         .WithMany()
@@ -277,7 +370,7 @@ namespace WebApplication3.Migrations
                 {
                     b.HasOne("WebApplication3.Models.AikstelesModeliai.Aikstele")
                         .WithMany()
-                        .HasForeignKey("AiksteleID");
+                        .HasForeignKey("AiksteleAiksteleID");
 
                     b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
                         .WithMany()
@@ -288,10 +381,67 @@ namespace WebApplication3.Migrations
                 {
                     b.HasOne("WebApplication3.Models.AikstelesModeliai.Aikstele")
                         .WithMany()
-                        .HasForeignKey("AiksteleID");
+                        .HasForeignKey("AiksteleAiksteleID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.UserRenginys", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("WebApplication3.Models.AikstelesModeliai.Renginys")
+                        .WithMany()
+                        .HasForeignKey("RenginysId");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.Book", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.Identity.ApplicationUser", b =>
+                {
+                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Komanda")
+                        .WithMany()
+                        .HasForeignKey("KomandaKomandaID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Komanda", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("KapitonasId");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Turnyras", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("TurnyroAutoriusId");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.TurnyroDalyvis", b =>
+                {
+                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Komanda")
+                        .WithMany()
+                        .HasForeignKey("KomandaID");
+
+                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Turnyras")
+                        .WithMany()
+                        .HasForeignKey("TurnyrasID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("userId");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>
                 {
                     b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
                         .WithMany()

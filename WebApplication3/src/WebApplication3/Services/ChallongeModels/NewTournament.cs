@@ -22,5 +22,14 @@ namespace WebApplication3.Services.ChallongeModels
 
         [JsonProperty("url")]
         public string Url { get; set; }
+
+        [JsonProperty("private")]
+        public bool Private { get; set; }
+
+        [JsonProperty("hide_forum")]
+        public bool HideForum { get; set; }
+
+        [JsonProperty("signup_cap")]
+        public int SignupCap { get; set; }
     }
 }

@@ -265,10 +265,15 @@ namespace WebApplication3.Migrations
                     b.Property<int>("TurnyrasID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ChallongeAddress");
+
                     b.Property<int>("KomanduKiekis");
 
+                    b.Property<int>("MinZaidejuKiekisKomandoje");
+
                     b.Property<string>("Pavadinimas")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 60);
 
                     b.Property<DateTime>("PrasidejimoData");
 
@@ -277,6 +282,8 @@ namespace WebApplication3.Migrations
                     b.Property<string>("TurnyroAutoriusId");
 
                     b.Property<int>("TurnyroBusena");
+
+                    b.Property<int>("TurnyroSportoSaka");
 
                     b.HasKey("TurnyrasID");
                 });

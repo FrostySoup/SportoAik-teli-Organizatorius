@@ -43,6 +43,17 @@
         subdomain: null
     };
 
-    $('#challonge_brackets').challonge('12321512');
-
 }).call(this);
+
+(function () {
+    $(function () {
+        var tournament = $("#tournament");
+        if (tournament.data("status") !== 'Naujas') {
+            $('#challonge_brackets').show().challonge(tournament.data("challonge"));
+        }
+    });
+
+    $('#joinTourney').on('click', function () {
+        $('#loader').addClass('loading');
+    });
+}());

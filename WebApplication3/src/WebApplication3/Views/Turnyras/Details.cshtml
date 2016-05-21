@@ -1,10 +1,50 @@
-@model WebApplication3.Models.TurnyroModeliai.Turnyras
+﻿@model WebApplication3.Models.TurnyroModeliai.Turnyras
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Gatvės Sporto Organizatorius - Turnyras";
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li><a asp-controller="Home" asp-action="Index">Pradžia</a></li>
+    <li><a asp-controller="Turnyras" asp-action="Index">Turnyrai</a></li>
+    <li class="active">"@Model.Pavadinimas"</li>
+</ol>
+
+<div id="tournament" data-status="@Model.TurnyroBusena" data-challonge="@Model.ChallongeAddress" class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Turnyras "@Model.Pavadinimas"</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info">Pagrindinė turnyro informacija</li>
+                    <li class="list-group-item">Statusas:<span class="pull-right text-success"><strong>@Model.TurnyroBusena</strong></span></li>
+                    <a href="#" class="list-group-item">Paskelbė:<span class="pull-right"><strong>@Model.TurnyroAutorius.UserName</strong></span></a>
+                    <li class="list-group-item">Turnyro paskelbimo laikas:<span class="pull-right"><strong>@Model.SukurimoData</strong></span></li>
+                    <li class="list-group-item">Sporto šaka:<span class="pull-right"><strong>@Model.TurnyroSportoSaka</strong></span></li>
+                    <li class="list-group-item">Turnyro formatas:<span class="pull-right"><strong>@Model.MinZaidejuKiekisKomandoje<small class="text-muted">v</small>@Model.MinZaidejuKiekisKomandoje</strong></span></li>
+                    <li class="list-group-item">Komandų skaičius:<span class="pull-right"><strong>@Model.Dalyviai.Count iš @Model.KomanduKiekis</strong></span></li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                @if (Model.Dalyviai.Count > 0)
+                {
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-info">Prisijungusios komandos</li>
+                        @foreach (var item in Model.Dalyviai)
+                        {
+                            <a href="#" class="list-group-item">@(item.Komanda.Pavadinimas)</a>
+                        }
+                    </ul>
+                }
+                <a asp-action="Join" asp-route-id="@Model.TurnyrasID" id="joinTourney" class="btn btn-info" role="button">Prisijungti</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<h2>Details</h2>
 
 <div>
     <h4>Turnyras</h4>
@@ -44,7 +84,7 @@
 <p>
     <a asp-action="Edit" asp-route-id="@Model.TurnyrasID">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</p>
+</p>*@
 
 <div id="challonge_brackets"></div>
 

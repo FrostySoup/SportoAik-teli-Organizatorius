@@ -8,8 +8,8 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20160515223802_Pakvietimas")]
-    partial class Pakvietimas
+    [Migration("20160521112642_reset")]
+    partial class reset
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -128,6 +128,8 @@ namespace WebApplication3.Migrations
 
                     b.Property<string>("Komentaras");
 
+                    b.Property<string>("UserName");
+
                     b.HasKey("AikstelesKomentarasID");
                 });
 
@@ -152,7 +154,7 @@ namespace WebApplication3.Migrations
 
                     b.Property<bool>("ArPrasidejo");
 
-                    b.Property<DateTimeOffset>("Data");
+                    b.Property<DateTime>("Data");
 
                     b.Property<string>("RenginioAutoriausID");
 
@@ -162,6 +164,15 @@ namespace WebApplication3.Migrations
                     b.Property<int>("ZaidejuKiekis");
 
                     b.HasKey("RenginysID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.UserRenginys", b =>
+                {
+                    b.Property<string>("RenginysId");
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.HasKey("RenginysId", "ApplicationUserId");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.Book", b =>
@@ -257,7 +268,12 @@ namespace WebApplication3.Migrations
 
                     b.Property<int>("KomanduKiekis");
 
-                    b.Property<string>("Pavadinimas");
+                    b.Property<string>("Pavadinimas")
+                        .IsRequired();
+
+                    b.Property<DateTime>("PrasidejimoData");
+
+                    b.Property<DateTime>("SukurimoData");
 
                     b.Property<string>("TurnyroAutoriusId");
 
@@ -275,6 +291,22 @@ namespace WebApplication3.Migrations
                     b.HasKey("KomandaID", "TurnyrasID");
                 });
 
+            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>
+                {
+                    b.Property<int>("CommentId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("commentedUser");
+
+                    b.Property<string>("userId");
+
+                    b.HasKey("CommentId");
+                });
+
             modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>
                 {
                     b.Property<int>("Id")
@@ -284,7 +316,7 @@ namespace WebApplication3.Migrations
 
                     b.Property<int>("komandosId");
 
-                    b.Property<int>("vartotojoId");
+                    b.Property<string>("vartotojoId");
 
                     b.HasKey("Id");
                 });
@@ -350,6 +382,17 @@ namespace WebApplication3.Migrations
                         .HasForeignKey("AiksteleAiksteleID");
                 });
 
+            modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.UserRenginys", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("WebApplication3.Models.AikstelesModeliai.Renginys")
+                        .WithMany()
+                        .HasForeignKey("RenginysId");
+                });
+
             modelBuilder.Entity("WebApplication3.Models.Book", b =>
                 {
                     b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
@@ -387,6 +430,13 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.TurnyroModeliai.Turnyras")
                         .WithMany()
                         .HasForeignKey("TurnyrasID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("userId");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Pakvietimas", b =>

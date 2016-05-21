@@ -1,7 +1,8 @@
 ﻿@model WebApplication3.Models.TurnyroModeliai.Turnyras
+@using WebApplication3.Models.TurnyroModeliai
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Gatvės Sporto Organizatorius - Naujas Turnyras";
 }
 <ol class="breadcrumb">
     <li><a asp-controller="Home" asp-action="Index">Pradžia</a></li>
@@ -9,45 +10,63 @@
     <li class="active">Naujo turnyro paskelbimas</li>
 </ol>
 <div class="well col-sm-6">
-    <form asp-action="Create">
+    <form id="create_tourney_form" asp-action="Create">
         <div class="form-horizontal">
             <h4>Naujo turnyro paskelbimas</h4>
             <hr />
             <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="KomanduKiekis" class="col-md-3 control-label"></label>
-                <div class="col-md-9">
-                    <select asp-for="KomanduKiekis" class="form-control">
-                        <option value="2">2</option>
-                        <option value="4">4</option>
-                        <option value="8">8</option>
-                        <option value="16">16</option>
-                        <option value="32">32</option>
-                    </select>
-                    <span asp-validation-for="KomanduKiekis" class="text-danger" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Pavadinimas" class="col-md-3 control-label"></label>
-                <div class="col-md-9">
+                <label asp-for="Pavadinimas" class="col-md-4 control-label"></label>
+                <div class="col-md-8">
                     <input asp-for="Pavadinimas" class="form-control" />
                     <span asp-validation-for="Pavadinimas" class="text-danger" />
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-offset-3 col-md-9">
-                    <input type="submit" value="Paskelbti" class="btn btn-primary" />
+                <label asp-for="TurnyroSportoSaka" class="col-md-4 control-label"></label>
+                <div class="col-md-8">
+                    <select asp-for="TurnyroSportoSaka" asp-items="Html.GetEnumSelectList<TurnyroSportoSaka>()" class="form-control">
+                    </select>
+                    <span asp-validation-for="TurnyroSportoSaka" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinZaidejuKiekisKomandoje" class="col-md-4 control-label"></label>
+                <div class="col-md-8">
+                    <select asp-for="MinZaidejuKiekisKomandoje" class="form-control">
+                        <option value="1">1v1</option>
+                        <option value="2">2v2</option>
+                        <option value="3">3v3</option>
+                        <option value="4">4v4</option>
+                        <option value="5">5v5</option>
+                    </select>
+                    <span asp-validation-for="MinZaidejuKiekisKomandoje" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="KomanduKiekis" class="col-md-4 control-label"></label>
+                <div class="col-md-8">
+                    <select asp-for="KomanduKiekis" class="form-control">
+                        <option value="4">4</option>
+                        <option value="8">8</option>
+                        <option value="16">16</option>
+                        <option value="32">32</option>
+                        <option value="64">64</option>
+                    </select>
+                    <span asp-validation-for="KomanduKiekis" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-9">
+                    <input type="submit" id="announceTourney" value="Paskelbti" class="btn btn-primary" />
                 </div>
             </div>
         </div>
     </form>
 </div>
-@*<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
 
 @section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/Turnyras/Create/script.js"></script>
 }

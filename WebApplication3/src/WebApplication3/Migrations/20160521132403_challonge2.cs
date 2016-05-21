@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
+using WebApplication3.Models.TurnyroModeliai;
 
 namespace WebApplication3.Migrations
 {
-    public partial class enumPridet : Migration
+    public partial class challonge2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,6 +14,20 @@ namespace WebApplication3.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_ApplicationUser_UserId", table: "AspNetUserRoles");
+            migrationBuilder.DropForeignKey(name: "FK_UserRenginys_ApplicationUser_ApplicationUserId", table: "UserRenginys");
+            migrationBuilder.DropForeignKey(name: "FK_UserRenginys_Renginys_RenginysId", table: "UserRenginys");
+            migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Komanda_KomandaID", table: "TurnyroDalyvis");
+            migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID", table: "TurnyroDalyvis");
+            migrationBuilder.AddColumn<int>(
+                name: "MinZaidejuKiekisKomandoje",
+                table: "Turnyras",
+                nullable: false,
+                defaultValue: 0);
+            migrationBuilder.AddColumn<int>(
+                name: "TurnyroSportoSaka",
+                table: "Turnyras",
+                nullable: false,
+                defaultValue: TurnyroSportoSaka.Krepsinis);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -47,6 +62,34 @@ namespace WebApplication3.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_UserRenginys_ApplicationUser_ApplicationUserId",
+                table: "UserRenginys",
+                column: "ApplicationUserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_UserRenginys_Renginys_RenginysId",
+                table: "UserRenginys",
+                column: "RenginysId",
+                principalTable: "Renginys",
+                principalColumn: "RenginysID",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_TurnyroDalyvis_Komanda_KomandaID",
+                table: "TurnyroDalyvis",
+                column: "KomandaID",
+                principalTable: "Komanda",
+                principalColumn: "KomandaID",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID",
+                table: "TurnyroDalyvis",
+                column: "TurnyrasID",
+                principalTable: "Turnyras",
+                principalColumn: "TurnyrasID",
                 onDelete: ReferentialAction.Cascade);
         }
 
@@ -57,6 +100,12 @@ namespace WebApplication3.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_ApplicationUser_UserId", table: "AspNetUserRoles");
+            migrationBuilder.DropForeignKey(name: "FK_UserRenginys_ApplicationUser_ApplicationUserId", table: "UserRenginys");
+            migrationBuilder.DropForeignKey(name: "FK_UserRenginys_Renginys_RenginysId", table: "UserRenginys");
+            migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Komanda_KomandaID", table: "TurnyroDalyvis");
+            migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID", table: "TurnyroDalyvis");
+            migrationBuilder.DropColumn(name: "MinZaidejuKiekisKomandoje", table: "Turnyras");
+            migrationBuilder.DropColumn(name: "TurnyroSportoSaka", table: "Turnyras");
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -91,6 +140,34 @@ namespace WebApplication3.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_UserRenginys_ApplicationUser_ApplicationUserId",
+                table: "UserRenginys",
+                column: "ApplicationUserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_UserRenginys_Renginys_RenginysId",
+                table: "UserRenginys",
+                column: "RenginysId",
+                principalTable: "Renginys",
+                principalColumn: "RenginysID",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_TurnyroDalyvis_Komanda_KomandaID",
+                table: "TurnyroDalyvis",
+                column: "KomandaID",
+                principalTable: "Komanda",
+                principalColumn: "KomandaID",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID",
+                table: "TurnyroDalyvis",
+                column: "TurnyrasID",
+                principalTable: "Turnyras",
+                principalColumn: "TurnyrasID",
                 onDelete: ReferentialAction.Restrict);
         }
     }

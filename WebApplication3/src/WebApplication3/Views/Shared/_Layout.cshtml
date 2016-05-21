@@ -17,7 +17,7 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-
+    <div id="loader"></div>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -32,7 +32,14 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a asp-controller="Renginys" asp-action="Index">Renginiai</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">Renginiai<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Renginys" asp-action="Index">Varžybos</a></li>
+                            <li><a asp-controller="Turnyras" asp-action="Index">Turnyrai</a></li>
+                        </ul>
+                    </li>
                     <li><a asp-controller="Renginys" asp-action="IndexMano">Mano renginiai</a></li>
                     <li><a asp-controller="Aiksteles" asp-action="Index">Aikštelės</a></li>
                     @if (User.Identity.IsAuthenticated)

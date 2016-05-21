@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace WebApplication3.Migrations
 {
-    public partial class oops : Migration
+    public partial class challonge : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,12 +13,14 @@ namespace WebApplication3.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_ApplicationUser_UserId", table: "AspNetUserRoles");
-            migrationBuilder.DropForeignKey(name: "FK_AikstelesKomentaras_ApplicationUser_ApplicationUserId", table: "AikstelesKomentaras");
             migrationBuilder.DropForeignKey(name: "FK_UserRenginys_ApplicationUser_ApplicationUserId", table: "UserRenginys");
             migrationBuilder.DropForeignKey(name: "FK_UserRenginys_Renginys_RenginysId", table: "UserRenginys");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Komanda_KomandaID", table: "TurnyroDalyvis");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID", table: "TurnyroDalyvis");
-            migrationBuilder.DropColumn(name: "ApplicationUserId", table: "AikstelesKomentaras");
+            migrationBuilder.AddColumn<string>(
+                name: "ChallongeAddress",
+                table: "Turnyras",
+                nullable: true);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -95,10 +97,7 @@ namespace WebApplication3.Migrations
             migrationBuilder.DropForeignKey(name: "FK_UserRenginys_Renginys_RenginysId", table: "UserRenginys");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Komanda_KomandaID", table: "TurnyroDalyvis");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID", table: "TurnyroDalyvis");
-            migrationBuilder.AddColumn<string>(
-                name: "ApplicationUserId",
-                table: "AikstelesKomentaras",
-                nullable: true);
+            migrationBuilder.DropColumn(name: "ChallongeAddress", table: "Turnyras");
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -131,13 +130,6 @@ namespace WebApplication3.Migrations
                 name: "FK_IdentityUserRole<string>_ApplicationUser_UserId",
                 table: "AspNetUserRoles",
                 column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-            migrationBuilder.AddForeignKey(
-                name: "FK_AikstelesKomentaras_ApplicationUser_ApplicationUserId",
-                table: "AikstelesKomentaras",
-                column: "ApplicationUserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
