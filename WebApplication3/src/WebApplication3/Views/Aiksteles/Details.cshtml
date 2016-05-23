@@ -63,7 +63,7 @@
                             <li class="list-group-item list-group-item-info">Aiksteles informacija</li>
                             <li class="list-group-item">Adresas: <span class="pull-right"><strong>@Html.DisplayFor(model => model.Aikstele.Adresas)</strong></span></li>
                             <li class="list-group-item">Miestas: <span class="pull-right"><strong>@Html.DisplayFor(model => model.Aikstele.Miestas)</strong></span></li>
-                            <li class="list-group-item">Reitingas:<input id="input-id" value="3" class="rating-loading"></li>
+                            <li class="list-group-item">Reitingas:<input id="input-id" value="@Model.Verte" class="rating-loading"></li>
                         </ul>
                         @foreach (AikstelesKomentaras comment in Model.Aikstele.Komentarai)
                         {

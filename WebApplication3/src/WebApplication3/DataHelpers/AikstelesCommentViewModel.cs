@@ -11,5 +11,6 @@ namespace WebApplication3.Helpers
         public Aikstele Aikstele { get; set; }
         public AikstelesKomentaras Komentaras { get; set; }
         public AikstelesVertinimas Vertinimas { get; set; }
+        public int Verte { get; set; }
     }
 }

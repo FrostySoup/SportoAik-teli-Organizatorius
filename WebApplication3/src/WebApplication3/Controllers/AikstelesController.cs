@@ -70,12 +70,27 @@ namespace WebApplication3.Controllers
 
             Aikstele aikstele = _context.Aiksteles
                 .Include(x => x.Komentarai)
+                .Include(x => x.Vertinimai)
                 .Single(m => m.AiksteleID == id);
             if (aikstele == null)
             {
                 return HttpNotFound();
             }
+            aikstele.Komentarai = aikstele.Komentarai.OrderByDescending(x => x.Data).ToList();
             AikstelesCommentViewModel aiksteleKomentaras = new AikstelesCommentViewModel();
+            if (aikstele.Vertinimai != null && aikstele.Vertinimai.Count > 0)
+            {
+                int kiek = 0;
+                int suma = 0;
+                foreach (AikstelesVertinimas vertinimas in aikstele.Vertinimai)
+                {
+                    kiek++;
+                    suma += vertinimas.Vertinimas;
+                }
+                aiksteleKomentaras.Verte = suma / kiek;
+            }
+            else
+                aiksteleKomentaras.Verte = 0;
             aiksteleKomentaras.Aikstele = aikstele;
             return View(aiksteleKomentaras);
         }
