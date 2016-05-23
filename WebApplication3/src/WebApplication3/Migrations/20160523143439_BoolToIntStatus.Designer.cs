@@ -8,8 +8,8 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20160523092137_StringToIntVertinimoKeys")]
-    partial class StringToIntVertinimoKeys
+    [Migration("20160523143439_BoolToIntStatus")]
+    partial class BoolToIntStatus
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -118,8 +118,7 @@ namespace WebApplication3.Migrations
 
             modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.AikstelesKomentaras", b =>
                 {
-                    b.Property<int>("AikstelesKomentarasID")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("AikstelesKomentarasID");
 
                     b.Property<string>("AiksteleAiksteleID");
 
@@ -136,8 +135,7 @@ namespace WebApplication3.Migrations
 
             modelBuilder.Entity("WebApplication3.Models.AikstelesModeliai.AikstelesVertinimas", b =>
                 {
-                    b.Property<int>("AikstelesVertinimasID")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("AikstelesVertinimasID");
 
                     b.Property<string>("AiksteleAiksteleID");
 
@@ -154,14 +152,14 @@ namespace WebApplication3.Migrations
 
                     b.Property<string>("AiksteleAiksteleID");
 
-                    b.Property<bool>("ArPrasidejo");
-
                     b.Property<DateTime>("Data");
 
                     b.Property<string>("RenginioAutoriausID");
 
                     b.Property<string>("SportoSaka")
                         .IsRequired();
+
+                    b.Property<string>("Statusas");
 
                     b.Property<int>("ZaidejuKiekis");
 

@@ -44,7 +44,9 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
+            Renginys renginys = _context.Renginiai
+                .Include(a => a.Aikstele)
+                .Single(m => m.RenginysID == id);
             if (renginys == null)
             {
                 return HttpNotFound();
@@ -52,6 +54,7 @@ namespace WebApplication3.Controllers
             TupleBoolUser renginioVartotojai = RenginiuServices.checkJoin(_context, User.Identity.Name, id);
             ViewData["Join"] = renginioVartotojai.canUse;
             ViewData["Users"] = renginioVartotojai.Users;
+            ViewData["UsersNumber"] = renginioVartotojai.Users.Count;
             ViewData["Email"] = _context.Users.Where(x => x.Id == renginys.RenginioAutoriausID).First().Email;
             return View(renginys);
         }
@@ -81,7 +84,7 @@ namespace WebApplication3.Controllers
                 }
                 renginys.Aikstele = _context.Aiksteles.Where(x => x.AiksteleID == renginys.Aikstele.AiksteleID).First();
                 renginys.RenginioAutoriausID = currentUser.Id;
-                renginys.ArPrasidejo = false;
+                renginys.Statusas = "Neprasidejo";
                 if (ModelState.IsValid && saka >= 0)
                 {
                     string temporaryID = System.Guid.NewGuid().ToString();
