@@ -8,9 +8,10 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160523143439_BoolToIntStatus")]
+    partial class BoolToIntStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -293,8 +294,6 @@ namespace WebApplication3.Migrations
                     b.Property<int>("KomandaID");
 
                     b.Property<int>("TurnyrasID");
-
-                    b.Property<long>("ChallongeId");
 
                     b.HasKey("KomandaID", "TurnyrasID");
                 });

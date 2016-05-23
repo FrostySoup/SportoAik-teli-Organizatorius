@@ -1,4 +1,4 @@
-@model WebApplication3.Models.AikstelesModeliai.Aikstele
+@model WebApplication3.Helpers.AikstelesCommentViewModel
 @using WebApplication3.Models.AikstelesModeliai
 
 @{
@@ -11,9 +11,10 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link href="~/css/star-rating.css" rel="stylesheet" />
     <title>Details</title>
 </head>
-<body>
+<body data-long="@Model.Aikstele.LongX" data-lat="@Model.Aikstele.LatY" data-name="Aikštel?">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -45,53 +46,71 @@
         <ol class="breadcrumb">
             <li><a href="../../">Pradzia</a></li>
             <li><a href="../index">Aiksteles</a></li>
-            <li class="active">Kalantos gatves aikstele</li>
+            <li class="active">@Html.DisplayFor(model => model.Aikstele.Adresas) aikstele</li>
         </ol>
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Kalantos gatves aikstele</h3>
+                <h3 class="panel-title">@Html.DisplayFor(model => model.Aikstele.Adresas) aikstele</h3>
             </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-12 col-md-6">
-                        <div id="map"></div>
+                        <div id="dvMap" style="width: 500px; height: 500px">
+                        </div>
                     </div>
                     <div class="col-xs-12 col-md-6">
                         <ul class="list-group">
                             <li class="list-group-item list-group-item-info">Aiksteles informacija</li>
-                            <li class="list-group-item">Adresas: <span class="pull-right"><strong>@Html.DisplayFor(model => model.Adresas)</strong></span></li>
-                            <li class="list-group-item">Miestas: <span class="pull-right"><strong>@Html.DisplayFor(model => model.Miestas)</strong></span></li>
-                            <li class="list-group-item">Reitingas:<input id="input-id" value="4" class="rating-loading"></li>
+                            <li class="list-group-item">Adresas: <span class="pull-right"><strong>@Html.DisplayFor(model => model.Aikstele.Adresas)</strong></span></li>
+                            <li class="list-group-item">Miestas: <span class="pull-right"><strong>@Html.DisplayFor(model => model.Aikstele.Miestas)</strong></span></li>
+                            <li class="list-group-item">Reitingas:<input id="input-id" value="@Model.Verte" class="rating-loading"></li>
                         </ul>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <strong>Andrius Rimkus</strong> <span class="text-muted">komentavo prieš 5 dienas</span>
+                        @foreach (AikstelesKomentaras comment in Model.Aikstele.Komentarai)
+                        {
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <strong>@comment.UserName</strong> <span class="text-muted">@comment.Data</span>
+                                </div>
+                                <div class="panel-body">
+                                    @comment.Komentaras
+                                </div>
                             </div>
-                            <div class="panel-body">
-                                Normaliai visai.
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <strong>Deividas Leonavi?ius</strong> <span class="text-muted">komentavo prieš 5 dienas</span>
-                            </div>
-                            <div class="panel-body">
-                                Nekrito visai. Bloga aikštel?.
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
-                <form action="/Aiksteles/komentaras" method="Post">
-                    <input type="text" name="Komentaras">                          
-                    <button type="button" class="btn btn-success pull-right m-l-10" data-toggle="modal" data-target="#AikstelesKomentaras">Komentuoti</button>
+                <form asp-action="Vertinti">
+                    <div>Komentaras</div>
+                    <div class="form-group">
+                        <input asp-for="Aikstele.AiksteleID" type="hidden" value="@Model.Aikstele.AiksteleID" />
+                        <textarea asp-for="Komentaras.Komentaras" class="form-control"></textarea>
+                    </div>
+                    <div>Vertinimas</div>
+                    <select asp-for="Vertinimas.Vertinimas">
+                        <option selected="selected" value="-1">Nevertinti</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <input type="submit" class="btn btn-success m-l-10" style="margin-bottom: 20px;" value="Vertinti">                   
                 </form>
             </div>
         </div>
     </div>
 
+
 <p>
-    <a asp-action="Edit" asp-route-id="@Model.AiksteleID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Aikstele.AiksteleID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </p>
 </body>
 </html>
+
+@section Scripts {  
+    <script src="~/lib/starrating/star-rating.js"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="~/js/renginiai/googlemap.js"></script>
+    <script src="~/js/renginiai/app.js"></script>
+}

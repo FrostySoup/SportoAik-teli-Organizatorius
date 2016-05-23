@@ -45,7 +45,7 @@
         <ol class="breadcrumb">
             <li><a href="../../">Pradzia</a></li>
             <li><a href="../index">Renginiai</a></li>
-            <li class="active">Kalantos gatves aikstele</li>
+            <li class="active">@Html.DisplayFor(model => model.Aikstele.Adresas)</li>
         </ol>
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -56,13 +56,13 @@
                     <div class="col-xs-12 col-md-6">
                         <ul class="list-group">
                             <li class="list-group-item list-group-item-info">Pagrindinė renginio informacija</li>
-                            <li class="list-group-item">Statusas:<span class="pull-right text-success">@Html.DisplayNameFor(model => model.ArPrasidejo)</span></li>
-                            <li href="../zaidejas/zaidejas.html" class="active-row list-group-item">Paskelbė:<span class="pull-right"><strong>@if (ViewData["Email"] != null){ @Html.Raw((string)ViewData["Email"]) }</strong></span></li>
+                            <li class="list-group-item">Statusas:<span class="pull-right text-success">@Html.DisplayFor(model => model.ArPrasidejo)</span></li>
+                            <li class="active-row list-group-item">Paskelbė:<span class="pull-right"><strong>@if (ViewData["Email"] != null){ @Html.Raw((string)ViewData["Email"]) }</strong></span></li>
                             <li class="list-group-item">Reginio pradžios laikas:<span class="pull-right"><strong>@Html.DisplayFor(model => model.Data)</strong></span></li>
-                            <li href="../aikstele/aikstele.html" class="active-row list-group-item">Reginio aikštelė:<span class="pull-right"><strong>Kalantos gatvės aikštelė, Kaunas</strong><span class="glyphicon glyphicon-zoom-in playground-icon" aria-hidden="true"></span></span></li>
+                            <li class="list-group-item">Reginio aikštelė:<span class="pull-right"><strong>@Html.DisplayFor(model => model.Aikstele.Adresas), @Html.DisplayFor(model => model.Aikstele.Miestas) @Html.ActionLink("Perziureti", "Details", "Aiksteles", new { @id = @Model.Aikstele.AiksteleID})</strong></span></li>
                             <li class="list-group-item">Sporto šaka:<span class="pull-right"><strong>@Html.DisplayFor(model => model.SportoSaka)</strong></span></li>
                             <li class="list-group-item">Tipas:<span class="pull-right"><strong>Varžybos</strong></span></li>
-                            <li class="list-group-item">Žaidėjų skaičius:<span class="pull-right"><strong>@Html.DisplayFor(model => model.ZaidejuKiekis)</strong></span></li>
+                            <li class="list-group-item">Žaidėjų skaičius:<span class="pull-right"><strong>@ViewData["UsersNumber"] / @Html.DisplayFor(model => model.ZaidejuKiekis)</strong></span></li>
                         </ul>
                     </div>
                     <div class="col-xs-12 col-md-6">
@@ -99,7 +99,7 @@
 
        
     <div class="footer text-center">
-        <p>IFF-3/2 studentai. Gatvės lyga. 2015</p>
+        <p>IFF-3/2 studentai. Gatvės lyga. 2016</p>
     </div>
     <p>
         <a asp-action="Index">Back to List</a>

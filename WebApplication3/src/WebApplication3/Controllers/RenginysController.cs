@@ -44,7 +44,9 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
+            Renginys renginys = _context.Renginiai
+                .Include(a => a.Aikstele)
+                .Single(m => m.RenginysID == id);
             if (renginys == null)
             {
                 return HttpNotFound();
@@ -52,6 +54,7 @@ namespace WebApplication3.Controllers
             TupleBoolUser renginioVartotojai = RenginiuServices.checkJoin(_context, User.Identity.Name, id);
             ViewData["Join"] = renginioVartotojai.canUse;
             ViewData["Users"] = renginioVartotojai.Users;
+            ViewData["UsersNumber"] = renginioVartotojai.Users.Count;
             ViewData["Email"] = _context.Users.Where(x => x.Id == renginys.RenginioAutoriausID).First().Email;
             return View(renginys);
         }
@@ -70,7 +73,10 @@ namespace WebApplication3.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Renginys renginys)
         {
-
+            if (renginys.Aikstele.AiksteleID == null)
+            {
+                return RedirectToAction("Create");
+            }
             var currentUser = _context.Users
                 .Where(x => x.Email == User.Identity.Name)
                 .FirstOrDefault();
@@ -115,11 +121,21 @@ namespace WebApplication3.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Renginys renginys)
+        public IActionResult Redaguoti_rengin(Renginys renginys)
         {
             if (ModelState.IsValid)
             {
-                _context.Update(renginys);
+                //int saka = -1;
+                //if (System.Int32.TryParse(renginys.SportoSaka, out saka))
+                //{
+                //    renginys.Statusas = RenginioStatusas.Zaidimas(saka);
+                //}
+                Renginys rengin = _context.Renginiai.Single(m => m.RenginysID == renginys.RenginysID);
+                rengin.SportoSaka = renginys.SportoSaka;
+                rengin.ZaidejuKiekis = renginys.ZaidejuKiekis;
+                rengin.Data = renginys.Data;
+                rengin.ArPrasidejo = renginys.ArPrasidejo;
+                _context.Update(rengin);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -161,7 +177,7 @@ namespace WebApplication3.Controllers
         [Authorize]
         // POST: Renginys/Prisijungti/5
         [ActionName("Prisijungti")]
-        public IActionResult Prisijungti(string id)
+        public IActionResult Prisijungti_prie_renginio(string id)
         {
             Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
             var currentUser = _context.Users
@@ -182,7 +198,7 @@ namespace WebApplication3.Controllers
                 _context.SaveChanges();
             }
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id = id });
         }
 
         [Authorize]
@@ -199,7 +215,7 @@ namespace WebApplication3.Controllers
             _context.Users.Update(currentUser);
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id = id });
         }
 
     }
