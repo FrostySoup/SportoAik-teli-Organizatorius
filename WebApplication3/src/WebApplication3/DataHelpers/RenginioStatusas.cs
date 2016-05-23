@@ -5,24 +5,24 @@ using System.Threading.Tasks;
 
 namespace WebApplication3.DataHelpers
 {
-    static public class RenginioStatusas
+    static public class Sportas
     {
-        public enum Statusai
+        public enum SportoZaidimai
         {
-            Neprasidėjes, Prasidėjes, Pasibaiges, Nutrauktas
+            Krepšinis, Futbolas, Tenisas, Tinklinis
         }
         static public string Zaidimas(int value)
         {
             switch (value)
             {
                 case 0:
-                    return "Neprasidėjes";
+                    return "Krepšinis";
                 case 1:
-                    return "Prasidėjes";
+                    return "Futbolas";
                 case 2:
-                    return "Pasibaiges";
+                    return "Tenisas";
                 case 3:
-                    return "Nutrauktas";
+                    return "Tinklinis";
                 default:
                     return "Nepasirinkta";
             }

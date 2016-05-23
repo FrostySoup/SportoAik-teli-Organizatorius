@@ -22,7 +22,7 @@ namespace WebApplication3.Models.AikstelesModeliai
         public string SportoSaka { get; set; }
 
         [Display(Name = "Renginio statusas")]
-        public string Statusas { get; set; }
+        public bool ArPrasidejo { get; set; }
 
         [Required]
         [Range(1, 40, ErrorMessage = "Minimalus žaidėjų kiekis 1, maksimalus 40")]

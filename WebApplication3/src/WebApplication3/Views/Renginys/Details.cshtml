@@ -56,7 +56,7 @@
                     <div class="col-xs-12 col-md-6">
                         <ul class="list-group">
                             <li class="list-group-item list-group-item-info">Pagrindinė renginio informacija</li>
-                            <li class="list-group-item">Statusas:<span class="pull-right text-success">@Html.DisplayNameFor(model => model.Statusas)</span></li>
+                            <li class="list-group-item">Statusas:<span class="pull-right text-success">@Html.DisplayFor(model => model.ArPrasidejo)</span></li>
                             <li class="active-row list-group-item">Paskelbė:<span class="pull-right"><strong>@if (ViewData["Email"] != null){ @Html.Raw((string)ViewData["Email"]) }</strong></span></li>
                             <li class="list-group-item">Reginio pradžios laikas:<span class="pull-right"><strong>@Html.DisplayFor(model => model.Data)</strong></span></li>
                             <li class="list-group-item">Reginio aikštelė:<span class="pull-right"><strong>@Html.DisplayFor(model => model.Aikstele.Adresas), @Html.DisplayFor(model => model.Aikstele.Miestas) @Html.ActionLink("Perziureti", "Details", "Aiksteles", new { @id = @Model.Aikstele.AiksteleID})</strong></span></li>
