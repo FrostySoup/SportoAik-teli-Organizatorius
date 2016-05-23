@@ -109,7 +109,8 @@ namespace WebApplication3.Controllers
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    FullName = model.FullName
                 };
 
                 if (!_context.Roles.Any(r => r.Name == "svecias"))
