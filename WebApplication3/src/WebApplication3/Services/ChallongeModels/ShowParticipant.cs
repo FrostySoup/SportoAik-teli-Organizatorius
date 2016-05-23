@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication3.Services.ChallongeModels
 {
-    internal class ParticipantWrapper
+    internal class ShowParticipantWrapper
     {
         [JsonProperty("participant")]
         public Participant Participant { get; set; }
@@ -15,7 +15,7 @@ namespace WebApplication3.Services.ChallongeModels
         public string ApiKey { get; set; }
     }
 
-    public class Participant
+    public class ShowParticipant
     {
         [JsonProperty("name")]
         public string Name { get; set; }

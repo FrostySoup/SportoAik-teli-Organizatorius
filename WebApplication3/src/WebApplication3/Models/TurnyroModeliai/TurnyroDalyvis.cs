@@ -8,5 +8,7 @@
 
         public int TurnyrasID { get; set; }
         public Turnyras Turnyras { get; set; }
+
+        public long ChallongeId { get; set; }
     }
 }

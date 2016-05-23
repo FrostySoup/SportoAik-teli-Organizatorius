@@ -230,3 +230,7 @@ body {
     color: #565353;
     background-color: #F5F5F5;
 }
+
+#tourney_management {
+    display: none;
+}

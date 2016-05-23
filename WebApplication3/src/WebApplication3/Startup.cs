@@ -43,8 +43,6 @@ namespace WebApplication3
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-
-
             services.AddMvc();
         }
 

@@ -1,4 +1,4 @@
-﻿@model WebApplication3.Models.TurnyroModeliai.Turnyras
+﻿@model WebApplication3.ViewModel.TurnyroViewModeliai.DetailsViewModel
 
 @{
     ViewData["Title"] = "Gatvės Sporto Organizatorius - Turnyras";
@@ -7,87 +7,120 @@
 <ol class="breadcrumb">
     <li><a asp-controller="Home" asp-action="Index">Pradžia</a></li>
     <li><a asp-controller="Turnyras" asp-action="Index">Turnyrai</a></li>
-    <li class="active">"@Model.Pavadinimas"</li>
+    <li class="active">"@Model.Turnyras.Pavadinimas"</li>
 </ol>
 
-<div id="tournament" data-status="@Model.TurnyroBusena" data-challonge="@Model.ChallongeAddress" class="panel panel-primary">
+<div id="tournament" data-status="@Model.Turnyras.TurnyroBusena" data-challonge="@Model.Turnyras.ChallongeAddress" class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Turnyras "@Model.Pavadinimas"</h3>
+        <h3 class="panel-title">Turnyras "@Model.Turnyras.Pavadinimas"</h3>
     </div>
     <div class="panel-body">
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-info">Pagrindinė turnyro informacija</li>
-                    <li class="list-group-item">Statusas:<span class="pull-right text-success"><strong>@Model.TurnyroBusena</strong></span></li>
-                    <a href="#" class="list-group-item">Paskelbė:<span class="pull-right"><strong>@Model.TurnyroAutorius.UserName</strong></span></a>
-                    <li class="list-group-item">Turnyro paskelbimo laikas:<span class="pull-right"><strong>@Model.SukurimoData</strong></span></li>
-                    <li class="list-group-item">Sporto šaka:<span class="pull-right"><strong>@Model.TurnyroSportoSaka</strong></span></li>
-                    <li class="list-group-item">Turnyro formatas:<span class="pull-right"><strong>@Model.MinZaidejuKiekisKomandoje<small class="text-muted">v</small>@Model.MinZaidejuKiekisKomandoje</strong></span></li>
-                    <li class="list-group-item">Komandų skaičius:<span class="pull-right"><strong>@Model.Dalyviai.Count iš @Model.KomanduKiekis</strong></span></li>
+                    <li class="list-group-item">Statusas:<span class="pull-right text-success"><strong>@Model.Turnyras.TurnyroBusena</strong></span></li>
+                    <a href="#" class="list-group-item">Paskelbė:<span class="pull-right"><strong>@Model.Turnyras.TurnyroAutorius.UserName</strong></span></a>
+                    <li class="list-group-item">Turnyro paskelbimo laikas:<span class="pull-right"><strong>@Model.Turnyras.SukurimoData</strong></span></li>
+                    <li class="list-group-item">Sporto šaka:<span class="pull-right"><strong>@Model.Turnyras.TurnyroSportoSaka</strong></span></li>
+                    <li class="list-group-item">Turnyro formatas:<span class="pull-right"><strong>@Model.Turnyras.MinZaidejuKiekisKomandoje<small class="text-muted">v</small>@Model.Turnyras.MinZaidejuKiekisKomandoje</strong></span></li>
+                    <li class="list-group-item">Komandų skaičius:<span class="pull-right"><strong>@Model.Turnyras.Dalyviai.Count iš @Model.Turnyras.KomanduKiekis</strong></span></li>
                 </ul>
             </div>
             <div class="col-xs-12 col-md-6">
-                @if (Model.Dalyviai.Count > 0)
+                @if (Model.Turnyras.Dalyviai.Count > 0)
                 {
                     <ul class="list-group">
                         <li class="list-group-item list-group-item-info">Prisijungusios komandos</li>
-                        @foreach (var item in Model.Dalyviai)
+                        @foreach (var item in Model.Turnyras.Dalyviai)
                         {
                             <a href="#" class="list-group-item">@(item.Komanda.Pavadinimas)</a>
                         }
                     </ul>
                 }
-                <a asp-action="Join" asp-route-id="@Model.TurnyrasID" id="joinTourney" class="btn btn-info" role="button">Prisijungti</a>
+                @if (!Model.Turnyras.Dalyviai.Contains(Model.TurnyroDalyvis))
+                {
+                <a asp-action="Join" asp-route-id="@Model.Turnyras.TurnyrasID" id="joinTourney" class="btn btn-info" role="button">Prisijungti</a>
+                }
+                else {
+                <div id="tourney_management" class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Turnyro valdymas</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="alert alert-danger">
+                            <strong>Dėmesio!</strong> Jūsų komandai reikia sužaisti varžybas su komanda "<span id="opponent_name"></span>"
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Teikti pasiūlymą dėl vietos ir laiko</button>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    @if (Model.Turnyras.TurnyroBusena != WebApplication3.Models.TurnyroModeliai.TurnyroBusena.Naujas)
+    {
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Turnyro eiga
+                    </div>
+                    <div class="panel-body">
+                        <div id="challonge_brackets"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+</div>
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Pasiūlymo sužaisti teikimas</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Pasiūlymo detalės
+                            </div>
+                            <div class="panel-body">
+                                <form>
+                                    <fieldset class="form-group">
+                                        <label for="playground">Aikštelė</label>
+                                        <input type="email" class="form-control" id="playground" placeholder="Pradėkite vesti adresą arba pasirinkite žemėlapyje">
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <label for="time">Laikas</label>
+                                        <div class="input-group date" id="datetimepicker1">
+                                            <input id="time" type="text" class="form-control">
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Uždaryti</button>
+                <button type="button" class="btn btn-primary">Teikti pasiūlymą</button>
             </div>
         </div>
     </div>
 </div>
 
-@*<h2>Details</h2>
-
-<div>
-    <h4>Turnyras</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.KomanduKiekis)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.KomanduKiekis)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Pavadinimas)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Pavadinimas)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.TurnyroBusena)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.TurnyroBusena)
-        </dd>
-    </dl>
-    <h4>Prisijungti prie turnyro</h4>
-    <a asp-action="Join" asp-route-id="@Model.TurnyrasID" class="btn btn-info" role="button">Prisijungti</a>
-    <h4>Turnyro dalyviai</h4>
-
-    @if (Model.Dalyviai != null)
-    {
-        @foreach (var item in Model.Dalyviai)
-        {
-            <p>@Html.DisplayFor(modelItem => item.Komanda.Pavadinimas)</p>
-        }
-    }
-</div>
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.TurnyrasID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</p>*@
-
-<div id="challonge_brackets"></div>
-
 @section Scripts {
+    <script>
+        var turnyroDalyvisID = @Model.TurnyroDalyvis.ChallongeId;
+        var turnyrasID = '@Model.Turnyras.ChallongeAddress';
+    </script>
     <script src="~/js/Turnyras/Details/script.js"></script>
 }

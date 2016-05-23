@@ -19,18 +19,55 @@ namespace WebApplication3.Services
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public static async Task AddTeam(Komanda komanda, string challongeAddress)
+        public static async Task StartTournament(string challongeAddress)
+        {
+            var address = "https://api.challonge.com/v1/tournaments/" + challongeAddress + "/start.json";
+
+            var apiKeyOnly = new ApiKeyOnly()
+            {
+                ApiKey = apiKey,
+            };
+
+            var result = await address
+            .PostJsonAsync(apiKeyOnly)
+            .ReceiveJson().ConfigureAwait(false);
+        }
+
+        public static async Task<dynamic> ShowParticipant(TurnyroDalyvis dalyvis, string challongeAddress)
+        {
+            var address = "https://api.challonge.com/v1/tournaments/" + challongeAddress + "/participants/" + dalyvis.ChallongeId + ".json?api_key=" + apiKey;
+            var result = await address
+                .GetJsonAsync().ConfigureAwait(false);
+
+            return result;
+        }
+
+        public static async Task<dynamic> MatchesIndex(string challongeAddress)
+        {
+            var address = "https://api.challonge.com/v1/tournaments/" + challongeAddress + "/matches.json?api_key=" + apiKey;
+            var result = await address
+                .GetJsonAsync().ConfigureAwait(false);
+
+            return result;
+        }
+
+        public static async Task<dynamic> AddTeam(Komanda komanda, string challongeAddress)
         {
             var address = "https://api.challonge.com/v1/tournaments/" + challongeAddress + "/participants.json";
             var participant = new ParticipantWrapper()
-            {
-                ApiKey = apiKey,
-                Participant = new Participant() { Name = komanda.Pavadinimas }
+                {
+                    ApiKey = apiKey,
+                    Participant = new Participant() {
+                        Name = komanda.Pavadinimas,
+                        TeamId = komanda.KomandaID.ToString()
+                }
             };
 
             var result = await address
                 .PostJsonAsync(participant)
-                .ReceiveJson();
+                .ReceiveJson().ConfigureAwait(false);
+
+            return result;
         }
 
         public static async Task<dynamic> CreateTournament(Turnyras turnyras)
@@ -47,13 +84,13 @@ namespace WebApplication3.Services
                 }
             };
 
-            var request = await "https://api.challonge.com/v1/tournaments.json"
+            var result = await "https://api.challonge.com/v1/tournaments.json"
                 .PostJsonAsync(tournament)
-                .ReceiveJson();
+                .ReceiveJson().ConfigureAwait(false);
 
             //var json = JsonConvert.SerializeObject(request);
 
-            return request;
+            return result;
         }
     }
 }
