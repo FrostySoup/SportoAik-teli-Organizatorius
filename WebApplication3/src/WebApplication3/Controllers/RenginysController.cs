@@ -115,7 +115,7 @@ namespace WebApplication3.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Renginys renginys)
+        public IActionResult Readaguoti_rengin(Renginys renginys)
         {
             if (ModelState.IsValid)
             {
@@ -161,7 +161,7 @@ namespace WebApplication3.Controllers
         [Authorize]
         // POST: Renginys/Prisijungti/5
         [ActionName("Prisijungti")]
-        public IActionResult Prisijungti(string id)
+        public IActionResult Prisijungti_prie_renginio(string id)
         {
             Renginys renginys = _context.Renginiai.Single(m => m.RenginysID == id);
             var currentUser = _context.Users
@@ -182,7 +182,7 @@ namespace WebApplication3.Controllers
                 _context.SaveChanges();
             }
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id = id });
         }
 
         [Authorize]
@@ -199,7 +199,7 @@ namespace WebApplication3.Controllers
             _context.Users.Update(currentUser);
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id = id });
         }
 
     }

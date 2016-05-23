@@ -14,49 +14,59 @@
 </head>
 <body>
 
-<form asp-action="Create">
-    <div class="form-horizontal">
-        <h4>Aikstele</h4>
-        <hr />
-        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Adresas" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Adresas" class="form-control" />
-                <span asp-validation-for="Adresas" class="text-danger" />
+    <form asp-action="Create">
+        <div class="form-horizontal">
+            <h4>Aikstele</h4>
+            <hr />
+            <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Adresas" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Adresas" class="form-control" />
+                    <span asp-validation-for="Adresas" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div id="dvMap" style="width: 500px; height: 500px">
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="LatY" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="LatY" readonly id="form_lat" class="form-control" />
+                    <span asp-validation-for="LatY" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="LongX" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="LongX" readonly id="form_long"class="form-control" />
+                    <span asp-validation-for="LongX" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Miestas" class="col-md-2 control-label"></label>
+                <div class="col-md-4">
+                    <input asp-for="Miestas" class="form-control" />
+                    <span asp-validation-for="Miestas" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Sukurti" class="btn btn-default" />
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="LatY" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="LatY" class="form-control" />
-                <span asp-validation-for="LatY" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="LongX" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="LongX" class="form-control" />
-                <span asp-validation-for="LongX" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Miestas" class="col-md-2 control-label"></label>
-            <div class="col-md-4">
-                <span asp-validation-for="Miestas" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-</form>
+    </form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 
 </body>
 </html>
+
+@section Scripts {
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="~/js/renginiai/googlemapcreate.js"></script>
+}

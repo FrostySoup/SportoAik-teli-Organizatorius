@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System;
 using WebApplication3.DataHelpers;
 using Microsoft.AspNet.Identity;
+using WebApplication3.Helpers;
 
 namespace WebApplication3.Controllers
 {
@@ -67,13 +68,16 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
-            Aikstele aikstele = _context.Aiksteles.Single(m => m.AiksteleID == id);
+            Aikstele aikstele = _context.Aiksteles
+                .Include(x => x.Komentarai)
+                .Single(m => m.AiksteleID == id);
             if (aikstele == null)
             {
                 return HttpNotFound();
             }
-
-            return View(aikstele);
+            AikstelesCommentViewModel aiksteleKomentaras = new AikstelesCommentViewModel();
+            aiksteleKomentaras.Aikstele = aikstele;
+            return View(aiksteleKomentaras);
         }
 
         // GET: Aiksteles/Create
@@ -163,12 +167,40 @@ namespace WebApplication3.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: Aiksteles/Komentuoti/5
+        // POST: Aiksteles/Vertinti/5
         [Authorize]
-        [HttpPost, ActionName("Komentuoti")]
-        public IActionResult Komentuoti(AikstelesKomentaras aikstelesKomentaras)
-        {           
-            return RedirectToAction("Index");
+        [HttpPost, ActionName("Vertinti")]
+        public IActionResult Vertinti(AikstelesCommentViewModel aikstelesVertinimas)
+        {
+            var currentUser = _context.Users
+                    .Include(v => v.Vertinimai)
+                    .Where(x => x.Email == User.Identity.Name)
+                    .FirstOrDefault();
+            Aikstele aikstele = _context.Aiksteles
+                .Include(v => v.Vertinimai)
+                .Where(x => x.AiksteleID == aikstelesVertinimas.Aikstele.AiksteleID)
+                .First();
+            if (aikstelesVertinimas.Komentaras.Komentaras != null)
+            {
+                AikstelesKomentaras komentaras = new AikstelesKomentaras();
+                komentaras.Aikstele = aikstele;
+                komentaras.AikstelesKomentarasID = System.Guid.NewGuid().ToString();
+                komentaras.Data = DateTime.Now;
+                komentaras.UserName = User.Identity.Name;
+                komentaras.Komentaras = aikstelesVertinimas.Komentaras.Komentaras;
+                _context.AikstelesKomentarai.Add(komentaras);
+            }
+            if (aikstelesVertinimas.Vertinimas.Vertinimas >= 0 && !PatikrintiArNevertino.patikrinti(_context, currentUser, aikstele))
+            {              
+                AikstelesVertinimas vertinimas = new AikstelesVertinimas();
+                vertinimas.Aikstele = aikstele;
+                vertinimas.AikstelesVertinimasID = System.Guid.NewGuid().ToString();
+                vertinimas.ApplicationUser = currentUser;
+                vertinimas.Vertinimas = aikstelesVertinimas.Vertinimas.Vertinimas;
+                _context.AikstelesVertinimai.Add(vertinimas);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Details", new { id = aikstelesVertinimas.Aikstele.AiksteleID });
         }
     }
 }

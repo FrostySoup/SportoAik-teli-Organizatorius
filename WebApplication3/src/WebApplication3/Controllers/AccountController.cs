@@ -127,6 +127,50 @@ namespace WebApplication3.Controllers
 
                 if (result.Succeeded)
                 {
+                    await _rolesHelper.addRoles(model.Email, new List<string>() { Roles.vartotojas });
+                    await _loginManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult RegisterAdmin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterAdmin(Register model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email
+                };
+
+                if (!_context.Roles.Any(r => r.Name == "svecias"))
+                {
+                    var store = new RoleStore<IdentityRole>(_context);
+                    var manager = new RoleManager<IdentityRole>(store, null, null, null, null, null);
+                    await manager.CreateAsync(new IdentityRole { Name = "svecias" });
+                    await manager.CreateAsync(new IdentityRole { Name = "vartotojas" });
+                    await manager.CreateAsync(new IdentityRole { Name = "kurejas" });
+                    await manager.CreateAsync(new IdentityRole { Name = "kapitonas" });
+                    await manager.CreateAsync(new IdentityRole { Name = "administratorius" });
+                }
+
+                var result = await _securityManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
                     await _rolesHelper.addRoles(model.Email, new List<string>() { Roles.administratorius });
                     await _loginManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(HomeController.Index), "Home");
