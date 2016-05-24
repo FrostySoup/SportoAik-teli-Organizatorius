@@ -21,6 +21,7 @@ namespace WebApplication3.Models.Identity
         public DbSet<Komanda> Komanda { get; set; }
         public DbSet<Pakvietimas> Pakvietimas { get; set; }
         public DbSet<Komentaras> Komentaras { get; set; }
+        public DbSet<Vertinimas> Vertinimas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

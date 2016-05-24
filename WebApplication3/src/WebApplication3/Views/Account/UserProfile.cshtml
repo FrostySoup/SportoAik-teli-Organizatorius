@@ -3,7 +3,7 @@
 <div class="container">
     <div class="panel panel-primary panel-player">
         <div class="panel-heading">
-            <h3 class="panel-title">Andrius Rimkus</h3>
+            <h3 class="panel-title">@Model.users.FullName</h3>
         </div>
         <div class="panel-body">
             <div class="row">
@@ -33,11 +33,30 @@
                         <li class="list-group-item">
                             Viso organizuota varžybų: <span class="pull-right"><strong>3</strong></span>
                         </li>
-                        <li class="list-group-item">
-                            Patikimumas:<input id="input-id" value="4" class="rating-loading">
+                        <li class="list-group-item rating-loading" >
+                            Patikimumas: @Model.users.Vidurkis
+                        </li>
+                        <li class="list-group-item rating-loading">
+                            Vertinusių kiekis: @Model.users.VertiniusiuKiekis
                         </li>
                     </ul>
-
+                    @ViewBag.ratedUser
+                    <form asp-action="RatePlayer" class="form-inline">
+                        <div>Vertinimas</div>
+                            <div class="form-group">
+                                <input asp-for="users.Id" type="hidden" value="@Model.users.Id" />
+                                <select asp-for="rating.Rating" class="form-control">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                           </div>
+                            <input type="submit" class="btn btn-success m-l-10" style="margin-bottom: 20px;" value="Vertinti">
+                    </form>
+                    
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active">
                             <a href="#profile" role="tab" data-toggle="tab">Komentarai</a>

@@ -9,7 +9,7 @@ using WebApplication3.Helpers;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-
+using System;
 
 namespace WebApplication3.Controllers
 {
@@ -81,6 +81,7 @@ namespace WebApplication3.Controllers
                     Komanda team = new Komanda { Kapitonas = komanda.Kapitonas, Pavadinimas = komanda.Pavadinimas };
                     await _rolesHelper.addRoles(User.Identity.Name, new List<string>() { Roles.kapitonas });
                     //komanda.Nariai.Add(currentUser);
+                    komanda.Date = DateTime.Today;
                     _context.Komanda.Add(komanda);
                     
                     _context.SaveChanges();

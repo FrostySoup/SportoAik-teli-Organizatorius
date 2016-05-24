@@ -12,7 +12,7 @@ namespace WebApplication3.Models.TurnyroModeliai
         [Key]
         public int KomandaID { get; set; }
         public string Pavadinimas { get; set; }
-
+        public DateTime Date { get; set; }
         public ApplicationUser Kapitonas { get; set; }
         public List<ApplicationUser> Nariai { get; set; }
         public ICollection<TurnyroDalyvis> Turnyrai { get; set; }

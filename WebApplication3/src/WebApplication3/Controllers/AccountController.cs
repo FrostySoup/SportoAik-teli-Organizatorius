@@ -69,6 +69,48 @@ namespace WebApplication3.Controllers
             return RedirectToAction("UserProfile", new { id = commentUser.Id });
         }
 
+        public IActionResult RatePlayer(UserProfileViewModel UserModel)
+        {
+            ApplicationUser ratedUser = _context.Users.Where(u => u.Id == UserModel.users.Id).FirstOrDefault();
+            ApplicationUser user = _context.Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+            List<Vertinimas> UserRatings = _context.Vertinimas.Where(u => u.RatedUser == UserModel.users.Id).ToList();
+            if (UserRatings == null)
+            {
+                UserRatings = new List<Vertinimas>();
+            }
+
+
+
+            int count = 0;
+            int sum = 0;
+            foreach(Vertinimas rating in UserRatings)
+            {
+                if (rating.UserId == user.Id && rating.RatedUser == ratedUser.Id)
+                {
+                    count++;
+                }
+                sum += rating.Rating;
+            }
+
+            if (count == 0)
+            {
+                Vertinimas rating = new Vertinimas { RatedUser = ratedUser.Id, Rating = UserModel.rating.Rating, UserId = user.Id, User = user, Date = DateTime.Now };
+                //ratedUser.UserRatings.Add(rating);
+                _context.Vertinimas.Add(rating);
+                sum += rating.Rating;
+                double average = sum / (UserRatings.Count +1);
+                ratedUser.Vidurkis = average;
+                ratedUser.VertiniusiuKiekis = UserRatings.Count +1;
+                _context.Update(ratedUser);
+                _context.SaveChanges();
+            }
+            else
+            {
+                ViewBag.ratedUser = "Jūs jau vertinote!";
+            }
+            return RedirectToAction("UserProfile", new { id = ratedUser.Id });
+        }
+
         [ActionName("LeaveTeam")]
         public IActionResult LeaveTeam(string id)
         {

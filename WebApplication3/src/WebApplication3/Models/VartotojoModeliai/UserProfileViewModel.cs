@@ -11,5 +11,6 @@ namespace WebApplication3.Models.VartotojoModeliai
     {
         public ApplicationUser users { get; set; }
         public Komentaras comment { get; set; }
+        public Vertinimas rating { get; set; }
     }
 }
