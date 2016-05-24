@@ -10,7 +10,7 @@ namespace WebApplication3.DataHelpers
     {
         public string AiksteleID { get; set; }
         public string LatY { get; set; }
-        public double LongX { get; set; }
+        public string LongX { get; set; }
         public string Adresas { get; set; }
         public string Miestas { get; set; }
 

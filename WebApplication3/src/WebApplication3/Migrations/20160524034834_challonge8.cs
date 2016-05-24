@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace WebApplication3.Migrations
 {
-    public partial class challonge4 : Migration
+    public partial class challonge8 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,10 +17,10 @@ namespace WebApplication3.Migrations
             migrationBuilder.DropForeignKey(name: "FK_UserRenginys_Renginys_RenginysId", table: "UserRenginys");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Komanda_KomandaID", table: "TurnyroDalyvis");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID", table: "TurnyroDalyvis");
-            migrationBuilder.AlterColumn<long>(
-                name: "ChallongeId",
-                table: "TurnyroDalyvis",
-                nullable: false);
+            migrationBuilder.AlterColumn<string>(
+                name: "LongX",
+                table: "Aikstele",
+                nullable: true);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -97,9 +97,9 @@ namespace WebApplication3.Migrations
             migrationBuilder.DropForeignKey(name: "FK_UserRenginys_Renginys_RenginysId", table: "UserRenginys");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Komanda_KomandaID", table: "TurnyroDalyvis");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID", table: "TurnyroDalyvis");
-            migrationBuilder.AlterColumn<int>(
-                name: "ChallongeId",
-                table: "TurnyroDalyvis",
+            migrationBuilder.AlterColumn<double>(
+                name: "LongX",
+                table: "Aikstele",
                 nullable: false);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",

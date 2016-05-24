@@ -249,12 +249,15 @@ namespace WebApplication3.Migrations
                 {
                     TurnyrasID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ChallongeAddress = table.Column<string>(nullable: true),
                     KomanduKiekis = table.Column<int>(nullable: false),
+                    MinZaidejuKiekisKomandoje = table.Column<int>(nullable: false),
                     Pavadinimas = table.Column<string>(nullable: false),
                     PrasidejimoData = table.Column<DateTime>(nullable: false),
                     SukurimoData = table.Column<DateTime>(nullable: false),
                     TurnyroAutoriusId = table.Column<string>(nullable: true),
-                    TurnyroBusena = table.Column<int>(nullable: false)
+                    TurnyroBusena = table.Column<int>(nullable: false),
+                    TurnyroSportoSaka = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -312,7 +315,8 @@ namespace WebApplication3.Migrations
                 columns: table => new
                 {
                     KomandaID = table.Column<int>(nullable: false),
-                    TurnyrasID = table.Column<int>(nullable: false)
+                    TurnyrasID = table.Column<int>(nullable: false),
+                    ChallongeId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -329,6 +333,48 @@ namespace WebApplication3.Migrations
                         principalTable: "Turnyras",
                         principalColumn: "TurnyrasID",
                         onDelete: ReferentialAction.Cascade);
+                });
+            migrationBuilder.CreateTable(
+                name: "TurnyroVarzybos",
+                columns: table => new
+                {
+                    TurnyroVarzybosID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AiksteleAiksteleID = table.Column<string>(nullable: true),
+                    KomandaAKomandaID = table.Column<int>(nullable: true),
+                    KomandaBKomandaID = table.Column<int>(nullable: true),
+                    PakvietimoBusena = table.Column<int>(nullable: false),
+                    PrasidejimoData = table.Column<DateTime>(nullable: false),
+                    SukurimoData = table.Column<DateTime>(nullable: false),
+                    TurnyrasTurnyrasID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TurnyroVarzybos", x => x.TurnyroVarzybosID);
+                    table.ForeignKey(
+                        name: "FK_TurnyroVarzybos_Aikstele_AiksteleAiksteleID",
+                        column: x => x.AiksteleAiksteleID,
+                        principalTable: "Aikstele",
+                        principalColumn: "AiksteleID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TurnyroVarzybos_Komanda_KomandaAKomandaID",
+                        column: x => x.KomandaAKomandaID,
+                        principalTable: "Komanda",
+                        principalColumn: "KomandaID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TurnyroVarzybos_Komanda_KomandaBKomandaID",
+                        column: x => x.KomandaBKomandaID,
+                        principalTable: "Komanda",
+                        principalColumn: "KomandaID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TurnyroVarzybos_Turnyras_TurnyrasTurnyrasID",
+                        column: x => x.TurnyrasTurnyrasID,
+                        principalTable: "Turnyras",
+                        principalColumn: "TurnyrasID",
+                        onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -412,6 +458,7 @@ namespace WebApplication3.Migrations
             migrationBuilder.DropTable("UserRenginys");
             migrationBuilder.DropTable("Book");
             migrationBuilder.DropTable("TurnyroDalyvis");
+            migrationBuilder.DropTable("TurnyroVarzybos");
             migrationBuilder.DropTable("Komentaras");
             migrationBuilder.DropTable("Pakvietimas");
             migrationBuilder.DropTable("AspNetRoles");

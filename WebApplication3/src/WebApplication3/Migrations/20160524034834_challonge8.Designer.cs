@@ -8,8 +8,8 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20160523133131_challonge4")]
-    partial class challonge4
+    [Migration("20160524034834_challonge8")]
+    partial class challonge8
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -109,7 +109,7 @@ namespace WebApplication3.Migrations
 
                     b.Property<string>("LatY");
 
-                    b.Property<double>("LongX");
+                    b.Property<string>("LongX");
 
                     b.Property<string>("Miestas");
 
@@ -300,6 +300,28 @@ namespace WebApplication3.Migrations
                     b.HasKey("KomandaID", "TurnyrasID");
                 });
 
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.TurnyroVarzybos", b =>
+                {
+                    b.Property<int>("TurnyroVarzybosID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AiksteleAiksteleID");
+
+                    b.Property<int?>("KomandaAKomandaID");
+
+                    b.Property<int?>("KomandaBKomandaID");
+
+                    b.Property<int>("PakvietimoBusena");
+
+                    b.Property<DateTime>("PrasidejimoData");
+
+                    b.Property<DateTime>("SukurimoData");
+
+                    b.Property<int?>("TurnyrasTurnyrasID");
+
+                    b.HasKey("TurnyroVarzybosID");
+                });
+
             modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>
                 {
                     b.Property<int>("CommentId")
@@ -439,6 +461,25 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.TurnyroModeliai.Turnyras")
                         .WithMany()
                         .HasForeignKey("TurnyrasID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.TurnyroVarzybos", b =>
+                {
+                    b.HasOne("WebApplication3.Models.AikstelesModeliai.Aikstele")
+                        .WithMany()
+                        .HasForeignKey("AiksteleAiksteleID");
+
+                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Komanda")
+                        .WithMany()
+                        .HasForeignKey("KomandaAKomandaID");
+
+                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Komanda")
+                        .WithMany()
+                        .HasForeignKey("KomandaBKomandaID");
+
+                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Turnyras")
+                        .WithMany()
+                        .HasForeignKey("TurnyrasTurnyrasID");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>

@@ -16,8 +16,6 @@ namespace WebApplication3.Models.TurnyroModeliai
         public ApplicationUser Kapitonas { get; set; }
         public List<ApplicationUser> Nariai { get; set; }
         public ICollection<TurnyroDalyvis> Turnyrai { get; set; }
-        
-       
 
         public string SearchForPlayers { get; set; }
     }

@@ -12,6 +12,7 @@ using WebApplication3.Services;
 using WebApplication3.ViewModel.TurnyroViewModeliai;
 using System.Net.Http;
 using System;
+using WebApplication3.Models.AikstelesModeliai;
 
 namespace WebApplication3.Controllers
 {
@@ -49,6 +50,8 @@ namespace WebApplication3.Controllers
                 return HttpNotFound();
             }
 
+            var aiksteles = _context.Aiksteles.ToList();
+
             var currentUser = _context.Users.Where(x => x.Email == User.Identity.Name).FirstOrDefault();
             Komanda komanda = TeamService.Instance.getUserTeam(_context, currentUser);
 
@@ -58,12 +61,26 @@ namespace WebApplication3.Controllers
                 .ThenInclude(m => m.Komanda)
                 .FirstOrDefault();
 
-            var ViewModel = new DetailsViewModel() { Turnyras = turnyras, TurnyroDalyvis = null };
+            var ViewModel = new DetailsViewModel() { Turnyras = turnyras, TurnyroDalyvis = null, Aiksteles = aiksteles };
 
             TurnyroDalyvis turnyroDalyvis = turnyras.Dalyviai.Where(t => t.Komanda == komanda).FirstOrDefault();
 
+            if (turnyroDalyvis != null)
+            {
+                TurnyroVarzybos turnyroVarzybos = _context.TurnyroVarzybos.Where(m => m.KomandaA_ID == turnyroDalyvis.ChallongeId && m.PakvietimoBusena != PakvietimoBusena.Pasibaiges).FirstOrDefault();
+                if (turnyroVarzybos == null)
+                {
+                    turnyroVarzybos = _context.TurnyroVarzybos.Where(m => m.KomandaB_ID == turnyroDalyvis.ChallongeId && m.PakvietimoBusena != PakvietimoBusena.Pasibaiges).FirstOrDefault();
+                }
 
-            if (komanda != null) {
+                if (turnyroVarzybos != null) {
+                    ViewModel.TurnyroVarzybos = turnyroVarzybos;
+                    Aikstele pasiulymoAikstele = _context.Aiksteles.Where(m => m.AiksteleID == turnyroVarzybos.AiksteleID).FirstOrDefault();
+                    ViewModel.PasiulymoAikstele = pasiulymoAikstele.Adresas;
+                }
+            }
+
+            if (komanda != null && turnyroDalyvis != null) {
                 ViewModel.TurnyroDalyvis = turnyroDalyvis;
             }
 
@@ -73,6 +90,18 @@ namespace WebApplication3.Controllers
             }
 
             return View(ViewModel);
+        }
+
+        // Get: Turnyras/End
+        public IActionResult End(string turnyroID)
+        {
+            Turnyras turnyras = _context.Turnyras.Single(m => m.ChallongeAddress == turnyroID);
+            turnyras.TurnyroBusena = TurnyroBusena.Pasibaiges;
+
+            _context.Update(turnyras);
+            _context.SaveChanges();
+
+            return Ok();
         }
 
         // GET: Turnyras/Join/5

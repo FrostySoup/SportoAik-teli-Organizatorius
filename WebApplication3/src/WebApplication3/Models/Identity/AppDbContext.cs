@@ -55,6 +55,9 @@ namespace WebApplication3.Models.Identity
 
             
         }
+
+
+        public DbSet<TurnyroVarzybos> TurnyroVarzybos { get; set; }
     }
 
 }

@@ -1,4 +1,6 @@
 ﻿@model WebApplication3.ViewModel.TurnyroViewModeliai.DetailsViewModel
+@using WebApplication3.Models.AikstelesModeliai
+@using WebApplication3.Models.TurnyroModeliai
 
 @{
     ViewData["Title"] = "Gatvės Sporto Organizatorius - Turnyras";
@@ -34,11 +36,11 @@
                         <li class="list-group-item list-group-item-info">Prisijungusios komandos</li>
                         @foreach (var item in Model.Turnyras.Dalyviai)
                         {
-                            <a href="#" class="list-group-item">@(item.Komanda.Pavadinimas)</a>
+                            <a asp-controller="Komanda" asp-action="TeamView" asp-route-id="@item.Komanda.KomandaID" class="list-group-item">@(item.Komanda.Pavadinimas)</a>
                         }
                     </ul>
                 }
-                @if (!Model.Turnyras.Dalyviai.Contains(Model.TurnyroDalyvis))
+                @if (!Model.Turnyras.Dalyviai.Contains(Model.TurnyroDalyvis) && User.IsInRole("kapitonas"))
                 {
                 <a asp-action="Join" asp-route-id="@Model.Turnyras.TurnyrasID" id="joinTourney" class="btn btn-info" role="button">Prisijungti</a>
                 }
@@ -47,12 +49,70 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Turnyro valdymas</h3>
                     </div>
+
                     <div class="panel-body">
-                        <div class="alert alert-danger">
-                            <strong>Dėmesio!</strong> Jūsų komandai reikia sužaisti varžybas su komanda "<span id="opponent_name"></span>"
-                        </div>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Teikti pasiūlymą dėl vietos ir laiko</button>
-                    </div>
+                        @if (Model.TurnyroVarzybos != null && Model.TurnyroVarzybos.PakvietimoBusena != PakvietimoBusena.Patvirtintas && Model.TurnyroVarzybos.KomandaB_ID == Model.TurnyroDalyvis.ChallongeId)
+                        {
+                            <div class="alert alert-danger">
+                                <strong>Dėmesio!</strong> Gavote pasiūlymą sužaisti
+                            </div>
+                            <div class="well wannaPlay">
+                                <p><strong>Laikas:</strong> @Model.TurnyroVarzybos.PrasidejimoData</p>
+                                <p><strong>Vieta:</strong> @Model.PasiulymoAikstele</p>
+                            </div>
+                            <form class="inline" action="/TurnyroVarzybos/Reject?varzybuID=@Model.TurnyroVarzybos.TurnyroVarzybosID&turnyroID=@Model.Turnyras.TurnyrasID" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-default">Atmesti</button>
+                            </form>
+                            <form class="inline" action="/TurnyroVarzybos/Confirm?varzybuID=@Model.TurnyroVarzybos.TurnyroVarzybosID&turnyroID=@Model.Turnyras.TurnyrasID" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-primary">Priimti</button>
+                            </form>
+                                }
+
+                                @if (Model.TurnyroVarzybos != null && Model.TurnyroVarzybos.KomandaB_ID != Model.TurnyroDalyvis.ChallongeId && Model.TurnyroVarzybos.PakvietimoBusena != PakvietimoBusena.Patvirtintas)
+                                {
+                                    <div class="alert alert-danger">
+                                        Laukiama atsako iš priešininkų komandos
+                                    </div>
+                                }
+
+                                @if (Model.TurnyroVarzybos != null && Model.TurnyroVarzybos.PakvietimoBusena == PakvietimoBusena.Patvirtintas)
+                                {
+                                    <form id="create_tourney_form" action="/Turnyras/Create" method="post" novalidate="novalidate">
+                                        <div class="form-horizontal">
+                                            <h4>Įveskite rezultatą</h4>
+                                            <div class="text-danger"></div>
+                                            <div class="form-group">
+                                                <label id="Komanda_1_label" class="col-md-5 control-label" for="Pavadinimas">Komanda 1</label>
+                                                <div class="col-md-3">
+                                                    <input class="form-control" type="text" id="Komanda_1" name="Komanda_1" value="">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label id="Komanda_2_label" class="col-md-5 control-label" for="Pavadinimas">Komanda 2</label>
+                                                <div class="col-md-3">
+                                                    <input class="form-control" type="text" id="Komanda_2" name="Komanda_2" value="">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-offset-6 col-md-9">
+                                                    <input type="button" id="addScore" value="Įvesti" class="btn btn-primary">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                }
+
+                                @if (Model.TurnyroVarzybos == null)
+                                {
+                                    <div class="alert alert-danger">
+                                        <strong>Dėmesio!</strong> Jūsų komandai reikia sužaisti varžybas su komanda "<span id="opponent_name"></span>"
+                                    </div>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Teikti pasiūlymą dėl vietos ir laiko</button>
+                                }
+</div>
+
                 </div>
                 }
             </div>
@@ -76,51 +136,84 @@
 </div>
 <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title" id="myModalLabel">Pasiūlymo sužaisti teikimas</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Pasiūlymo detalės
-                            </div>
-                            <div class="panel-body">
-                                <form>
+        <form action="/TurnyroVarzybos/Create?turnyroID=@Model.Turnyras.TurnyrasID" method="post">
+            @Html.AntiForgeryToken()
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Pasiūlymo sužaisti teikimas</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Pasiūlymo detalės
+                                </div>
+                                <div class="panel-body">
                                     <fieldset class="form-group">
                                         <label for="playground">Aikštelė</label>
-                                        <input type="email" class="form-control" id="playground" placeholder="Pradėkite vesti adresą arba pasirinkite žemėlapyje">
+                                        @if (@Model.Aiksteles != null)
+                                        {
+                                            List<SelectListItem> listItems = new List<SelectListItem>();
+                                            foreach (Aikstele aikstele in Model.Aiksteles)
+                                            {
+                                                listItems.Add(new SelectListItem
+                                                {
+                                                    Text = aikstele.Adresas + ", " + aikstele.Miestas,
+                                                    Value = aikstele.AiksteleID
+                                                });
+                                            }
+                                            @Html.DropDownListFor(model => model.Aiksteles, listItems, new { @class = "form-control" })
+                                        }
                                     </fieldset>
                                     <fieldset class="form-group">
                                         <label for="time">Laikas</label>
                                         <div class="input-group date" id="datetimepicker1">
-                                            <input id="time" type="text" class="form-control">
+                                            <input id="PrasidejimoData" name="PrasidejimoData" type="text" class="form-control">
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-time"></span>
                                             </span>
                                         </div>
                                     </fieldset>
-                                </form>
+                                    <input type="hidden" name="TurnyrasID" value="@Model.Turnyras.TurnyrasID">
+                                    <input type="hidden" name="AiksteleID" id="AiksteleID">
+                                    @if (@Model.TurnyroDalyvis != null)
+                                    {
+                                        <input type="hidden" name="KomandaA_ID" value="@Model.TurnyroDalyvis.ChallongeId">
+                                    }
+                                    <input type="hidden" id="KomandaB_ID" name="KomandaB_ID" value="">
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Uždaryti</button>
+                    <button type="submit" class="btn btn-primary">Teikti pasiūlymą</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Uždaryti</button>
-                <button type="button" class="btn btn-primary">Teikti pasiūlymą</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
 @section Scripts {
+@if (@Model.TurnyroDalyvis != null)
+{
     <script>
         var turnyroDalyvisID = @Model.TurnyroDalyvis.ChallongeId;
         var turnyrasID = '@Model.Turnyras.ChallongeAddress';
     </script>
+}
+
+@if (@Model.TurnyroVarzybos != null)
+{
+    <script>
+        var turnyroVarzybuID = @Model.TurnyroVarzybos.TurnyroVarzybosID;
+    </script>
+}
+
+
     <script src="~/js/Turnyras/Details/script.js"></script>
 }

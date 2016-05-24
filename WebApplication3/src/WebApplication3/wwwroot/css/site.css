@@ -234,3 +234,11 @@ body {
 #tourney_management {
     display: none;
 }
+
+.inline {
+    display: inline-block;
+}
+
+.wannaPlay p:last-of-type {
+    margin-bottom: 0;
+}
