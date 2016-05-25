@@ -13,6 +13,7 @@ using WebApplication3.ViewModel.TurnyroViewModeliai;
 using System.Net.Http;
 using System;
 using WebApplication3.Models.AikstelesModeliai;
+using WebApplication3.Services.Contracts;
 
 namespace WebApplication3.Controllers
 {
@@ -21,12 +22,14 @@ namespace WebApplication3.Controllers
         private AppDbContext _context;
         private readonly RolesHelper _rolesHelper;
         private readonly UserManager<ApplicationUser> _securityManager;
+        private ITeamService _teamService;
 
-        public TurnyrasController(AppDbContext context, UserManager<ApplicationUser> secMgr)
+        public TurnyrasController(AppDbContext context, UserManager<ApplicationUser> secMgr, ITeamService teamService)
         {
             _context = context;
             _securityManager = secMgr;
             _rolesHelper = new RolesHelper(secMgr, context);
+            _teamService = teamService;
         }
 
         // GET: Turnyras
@@ -53,7 +56,7 @@ namespace WebApplication3.Controllers
             var aiksteles = _context.Aiksteles.ToList();
 
             var currentUser = _context.Users.Where(x => x.Email == User.Identity.Name).FirstOrDefault();
-            Komanda komanda = TeamService.Instance.getUserTeam(_context, currentUser);
+            Komanda komanda = _teamService.getUserTeam(_context, currentUser);
 
             Turnyras turnyras = _context.Turnyras.Where(m => m.TurnyrasID == id)
                 .Include(m => m.TurnyroAutorius)
@@ -114,7 +117,7 @@ namespace WebApplication3.Controllers
 
             Turnyras turnyras = _context.Turnyras.Include(m => m.Dalyviai).Single(m => m.TurnyrasID == id);
             var currentUser = _context.Users.Where(x => x.Email == User.Identity.Name).FirstOrDefault();
-            Komanda komanda = TeamService.Instance.getUserTeam(_context, currentUser);
+            Komanda komanda = _teamService.getUserTeam(_context, currentUser);
 
             dynamic result = await ChallongeService.AddTeam(komanda, turnyras.ChallongeAddress).ConfigureAwait(false);
             turnyras.Dalyviai.Add(new TurnyroDalyvis() { KomandaID = komanda.KomandaID, TurnyrasID = turnyras.TurnyrasID, ChallongeId = result.participant.id });

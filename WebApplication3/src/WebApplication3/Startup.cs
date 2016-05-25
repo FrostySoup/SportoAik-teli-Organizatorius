@@ -13,6 +13,8 @@ using WebApplication3.Models.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Authentication.Facebook;
+using WebApplication3.Services.Contracts;
+using WebApplication3.Services;
 
 namespace WebApplication3
 {
@@ -44,6 +46,8 @@ namespace WebApplication3
             .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            services.AddTransient<ITeamService, TeamService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
