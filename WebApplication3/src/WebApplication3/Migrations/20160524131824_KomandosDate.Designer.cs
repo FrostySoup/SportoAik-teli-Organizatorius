@@ -8,9 +8,10 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160524131824_KomandosDate")]
+    partial class KomandosDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -235,10 +236,6 @@ namespace WebApplication3.Migrations
                     b.Property<string>("UserName")
                         .HasAnnotation("MaxLength", 256);
 
-                    b.Property<int>("VertiniusiuKiekis");
-
-                    b.Property<double>("Vidurkis");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -355,22 +352,6 @@ namespace WebApplication3.Migrations
                     b.Property<string>("vartotojoId");
 
                     b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Vertinimas", b =>
-                {
-                    b.Property<int>("RatingId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<string>("RatedUser");
-
-                    b.Property<int>("Rating");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("RatingId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
@@ -496,13 +477,6 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Vertinimas", b =>
-                {
-                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
         }
     }
