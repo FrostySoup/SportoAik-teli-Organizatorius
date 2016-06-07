@@ -22,14 +22,14 @@ namespace WebApplication3.Controllers
         private AppDbContext _context;
         private readonly RolesHelper _rolesHelper;
         private readonly UserManager<ApplicationUser> _securityManager;
-        private ITeamService _teamService;
+        private TeamService _teamService;
 
-        public TurnyrasController(AppDbContext context, UserManager<ApplicationUser> secMgr, ITeamService teamService)
+        public TurnyrasController(AppDbContext context, UserManager<ApplicationUser> securityManager)
         {
             _context = context;
-            _securityManager = secMgr;
-            _rolesHelper = new RolesHelper(secMgr, context);
-            _teamService = teamService;
+            _securityManager = securityManager;
+            _teamService = new TeamService();
+            _rolesHelper = new RolesHelper(_securityManager, _context);
         }
 
         // GET: Turnyras
@@ -64,22 +64,32 @@ namespace WebApplication3.Controllers
                 .ThenInclude(m => m.Komanda)
                 .FirstOrDefault();
 
-            var ViewModel = new DetailsViewModel() { Turnyras = turnyras, TurnyroDalyvis = null, Aiksteles = aiksteles };
+            var ViewModel = new DetailsViewModel() { Turnyras = turnyras, TurnyroDalyvis = null, Aiksteles = aiksteles, Komanda = komanda };
 
             TurnyroDalyvis turnyroDalyvis = turnyras.Dalyviai.Where(t => t.Komanda == komanda).FirstOrDefault();
 
+            List<TurnyroVarzybos> visosVarzybos = _context.TurnyroVarzybos.Where(m => m.TurnyrasID == id).ToList();
+            ViewModel.VisosTurnyroVarzybos = visosVarzybos;
+
+            List<Komanda> visosKomandos = _context.Komanda.ToList();
+            ViewModel.VisosTurnyroKomandos = visosKomandos;
+
             if (turnyroDalyvis != null)
             {
-                TurnyroVarzybos turnyroVarzybos = _context.TurnyroVarzybos.Where(m => m.KomandaA_ID == turnyroDalyvis.ChallongeId && m.PakvietimoBusena != PakvietimoBusena.Pasibaiges).FirstOrDefault();
+                TurnyroVarzybos turnyroVarzybos = _context.TurnyroVarzybos.Where(m => m.KomandaA_ID == turnyroDalyvis.ChallongeId && m.PakvietimoBusena != PakvietimoBusena.Pasibaiges).Include(m => m.RezultatoPasiulymas).FirstOrDefault();
                 if (turnyroVarzybos == null)
                 {
-                    turnyroVarzybos = _context.TurnyroVarzybos.Where(m => m.KomandaB_ID == turnyroDalyvis.ChallongeId && m.PakvietimoBusena != PakvietimoBusena.Pasibaiges).FirstOrDefault();
+                    turnyroVarzybos = _context.TurnyroVarzybos.Where(m => m.KomandaB_ID == turnyroDalyvis.ChallongeId && m.PakvietimoBusena != PakvietimoBusena.Pasibaiges).Include(m => m.RezultatoPasiulymas).FirstOrDefault();
                 }
 
                 if (turnyroVarzybos != null) {
                     ViewModel.TurnyroVarzybos = turnyroVarzybos;
                     Aikstele pasiulymoAikstele = _context.Aiksteles.Where(m => m.AiksteleID == turnyroVarzybos.AiksteleID).FirstOrDefault();
-                    ViewModel.PasiulymoAikstele = pasiulymoAikstele.Adresas;
+                    ViewModel.Aikstele = pasiulymoAikstele;
+
+                    RezultatoPasiulymas rezultatoPasiulymas = turnyroVarzybos.RezultatoPasiulymas.Where(p => p.Komanda.KomandaID == komanda.KomandaID).SingleOrDefault();
+                    ViewModel.RezultatoPasiulymas = rezultatoPasiulymas;
+
                 }
             }
 
@@ -108,24 +118,17 @@ namespace WebApplication3.Controllers
         }
 
         // GET: Turnyras/Join/5
-        public async Task<IActionResult> Join(int? id)
+        public IActionResult Join(int id, long participantID)
         {
-            if (id == null)
-            {
-                return HttpNotFound();
-            }
-
             Turnyras turnyras = _context.Turnyras.Include(m => m.Dalyviai).Single(m => m.TurnyrasID == id);
             var currentUser = _context.Users.Where(x => x.Email == User.Identity.Name).FirstOrDefault();
             Komanda komanda = _teamService.getUserTeam(_context, currentUser);
 
-            dynamic result = await ChallongeService.AddTeam(komanda, turnyras.ChallongeAddress).ConfigureAwait(false);
-            turnyras.Dalyviai.Add(new TurnyroDalyvis() { KomandaID = komanda.KomandaID, TurnyrasID = turnyras.TurnyrasID, ChallongeId = result.participant.id });
+            turnyras.Dalyviai.Add(new TurnyroDalyvis() { KomandaID = komanda.KomandaID, TurnyrasID = turnyras.TurnyrasID, ChallongeId = participantID });
 
             if (turnyras.KomanduKiekis == turnyras.Dalyviai.Count)
             {
                 turnyras.TurnyroBusena = TurnyroBusena.Vykstantis;
-                await ChallongeService.StartTournament(turnyras.ChallongeAddress);
             }
 
             _context.Update(turnyras);
@@ -154,9 +157,6 @@ namespace WebApplication3.Controllers
                 {
                     turnyras.TurnyroAutorius = currentUser;
                 }
-
-                dynamic result = await ChallongeService.CreateTournament(turnyras).ConfigureAwait(false);
-                turnyras.ChallongeAddress = result.tournament.url;
 
                 await _rolesHelper.addRoles(User.Identity.Name, new List<string>() { Roles.kurejas });
 

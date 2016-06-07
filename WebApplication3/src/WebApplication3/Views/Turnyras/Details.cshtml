@@ -28,6 +28,18 @@
                     <li class="list-group-item">Turnyro formatas:<span class="pull-right"><strong>@Model.Turnyras.MinZaidejuKiekisKomandoje<small class="text-muted">v</small>@Model.Turnyras.MinZaidejuKiekisKomandoje</strong></span></li>
                     <li class="list-group-item">Komandų skaičius:<span class="pull-right"><strong>@Model.Turnyras.Dalyviai.Count iš @Model.Turnyras.KomanduKiekis</strong></span></li>
                 </ul>
+
+                @if (Model.VisosTurnyroVarzybos.Count > 0)
+                {
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-info">Turnyro varžybos</li>
+                        @foreach (var item in Model.VisosTurnyroVarzybos)
+                        {
+                            <a asp-controller="TurnyroVarzybos" asp-action="Details" asp-route-id="@item.TurnyroVarzybosID" asp-route-tourney="@Model.Turnyras.TurnyrasID" class="list-group-item">"@(@Model.VisosTurnyroKomandos.Where(k => k.KomandaID == item.KomandaA_ID_DB).SingleOrDefault().Pavadinimas)" vs "@(@Model.VisosTurnyroKomandos.Where(k => k.KomandaID == item.KomandaB_ID_DB).SingleOrDefault().Pavadinimas)"</a>
+                        }
+                    </ul>
+                }
+
             </div>
             <div class="col-xs-12 col-md-6">
                 @if (Model.Turnyras.Dalyviai.Count > 0)
@@ -36,18 +48,27 @@
                         <li class="list-group-item list-group-item-info">Prisijungusios komandos</li>
                         @foreach (var item in Model.Turnyras.Dalyviai)
                         {
-                            <a asp-controller="Komanda" asp-action="TeamView" asp-route-id="@item.Komanda.KomandaID" class="list-group-item">@(item.Komanda.Pavadinimas)</a>
+                            <a asp-controller="Komanda" asp-action="TeamView" asp-route-id="@item.Komanda.KomandaID" asp-route-tourney="@Model.Turnyras.TurnyrasID" class="list-group-item">@(item.Komanda.Pavadinimas)</a>
                         }
                     </ul>
                 }
                 @if (!Model.Turnyras.Dalyviai.Contains(Model.TurnyroDalyvis) && User.IsInRole("kapitonas"))
                 {
-                <a asp-action="Join" asp-route-id="@Model.Turnyras.TurnyrasID" id="joinTourney" class="btn btn-info" role="button">Prisijungti</a>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Turnyro valdymas kapitonams</h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <a href="#" id="joinTourney" class="btn btn-primary" role="button">Prisijungti</a>
+                        </div>
+                    </div>
                 }
-                else {
+                else
+                {
                 <div id="tourney_management" class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Turnyro valdymas</h3>
+                        <h3 class="panel-title">Turnyro valdymas kapitonams</h3>
                     </div>
 
                     <div class="panel-body">
@@ -58,7 +79,7 @@
                             </div>
                             <div class="well wannaPlay">
                                 <p><strong>Laikas:</strong> @Model.TurnyroVarzybos.PrasidejimoData</p>
-                                <p><strong>Vieta:</strong> @Model.PasiulymoAikstele</p>
+                                <p><strong>Vieta:</strong> @Model.Aikstele.Adresas, @Model.Aikstele.Miestas</p>
                             </div>
                             <form class="inline" action="/TurnyroVarzybos/Reject?varzybuID=@Model.TurnyroVarzybos.TurnyroVarzybosID&turnyroID=@Model.Turnyras.TurnyrasID" method="post">
                                 @Html.AntiForgeryToken()
@@ -72,16 +93,17 @@
 
                                 @if (Model.TurnyroVarzybos != null && Model.TurnyroVarzybos.KomandaB_ID != Model.TurnyroDalyvis.ChallongeId && Model.TurnyroVarzybos.PakvietimoBusena != PakvietimoBusena.Patvirtintas)
                                 {
-                                    <div class="alert alert-danger">
+                                    <div class="alert alert-danger no-bottom-margin">
                                         Laukiama atsako iš priešininkų komandos
                                     </div>
                                 }
 
                                 @if (Model.TurnyroVarzybos != null && Model.TurnyroVarzybos.PakvietimoBusena == PakvietimoBusena.Patvirtintas)
                                 {
+                                    @if (Model.RezultatoPasiulymas == null) {
                                     <form id="create_tourney_form" action="/Turnyras/Create" method="post" novalidate="novalidate">
                                         <div class="form-horizontal">
-                                            <h4>Įveskite rezultatą</h4>
+                                            <p>Įveskite rezultato pasiūlymą (jį dar turės patvirtinti renginio kūrėjas):</p>
                                             <div class="text-danger"></div>
                                             <div class="form-group">
                                                 <label id="Komanda_1_label" class="col-md-5 control-label" for="Pavadinimas">Komanda 1</label>
@@ -95,13 +117,17 @@
                                                     <input class="form-control" type="text" id="Komanda_2" name="Komanda_2" value="">
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group no-bottom-margin">
                                                 <div class="col-md-offset-6 col-md-9">
                                                     <input type="button" id="addScore" value="Įvesti" class="btn btn-primary">
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
+                                    }
+                                    else {
+                                        <p class="no-bottom-margin">Rezultato pasiūlymas pateiktas, laukite renginio kūrėjo patvirtinimo.</p>
+                                    }
                                 }
 
                                 @if (Model.TurnyroVarzybos == null)
@@ -115,6 +141,22 @@
 
                 </div>
                 }
+
+
+
+            @if (Model.Turnyras.TurnyroAutorius.Email == User.Identity.Name && Model.VisosTurnyroVarzybos.Where(v => v.RezultatoBusena == RezultatoBusena.Nepatvirtintas).ToList().Count > 0) {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Turnyro valdymas turnyro kūrėjui</h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <a asp-controller="RezultatoPasiulymas" asp-action="Index" asp-route-turnyroID="@Model.Turnyras.TurnyrasID" class="btn btn-primary" role="button">Tvirtinti rezultatus</a>
+                    </div>
+                </div>
+            }
+
+
             </div>
         </div>
     @if (Model.Turnyras.TurnyroBusena != WebApplication3.Models.TurnyroModeliai.TurnyroBusena.Naujas)
@@ -181,8 +223,10 @@
                                     @if (@Model.TurnyroDalyvis != null)
                                     {
                                         <input type="hidden" name="KomandaA_ID" value="@Model.TurnyroDalyvis.ChallongeId">
+                                        <input type="hidden" name="KomandaA_ID_DB" value="@Model.TurnyroDalyvis.KomandaID">
                                     }
                                     <input type="hidden" id="KomandaB_ID" name="KomandaB_ID" value="">
+                                    <input type="hidden" id="KomandaB_ID_DB" name="KomandaB_ID_DB" value="">
                                 </div>
                             </div>
 
@@ -203,7 +247,16 @@
 {
     <script>
         var turnyroDalyvisID = @Model.TurnyroDalyvis.ChallongeId;
+    </script>
+}
+
+@if (@Model.Turnyras != null)
+{
+    <script>
         var turnyrasID = '@Model.Turnyras.ChallongeAddress';
+        var turnyrasTikrasID = @Model.Turnyras.TurnyrasID;
+        var turnyroDydis = @Model.Turnyras.KomanduKiekis;
+        var turnyroDalyviuKiekis = @Model.Turnyras.Dalyviai.Count;
     </script>
 }
 
@@ -214,6 +267,14 @@
     </script>
 }
 
+@if (@Model.Komanda != null)
+{
+    <script>
+        var komanda = {};
+        komanda['name'] = '@Model.Komanda.Pavadinimas';
+        komanda['id'] = '@Model.Komanda.KomandaID';
+    </script>
+}
 
     <script src="~/js/Turnyras/Details/script.js"></script>
 }

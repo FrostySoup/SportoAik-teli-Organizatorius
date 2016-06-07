@@ -107,31 +107,9 @@
             }
         }
 
-        var matchObject = {};
-        matchObject['scores_csv'] = p1Score + "-" + p2Score;
-        matchObject['winner_id'] = winner;
-
-
-        $.post("https://api.challonge.com/v1/tournaments/" + turnyrasID + "/matches/" + match.id + ".json",
-            {
-                _method: "put",
-                api_key: "LQaugevNzjBY1EoU7lfpvbyeyWFeUI6vWGP4tgWo",
-                match: matchObject
-                
-            }
-        ).done(function (data) {
-            console.log(data);
-            $.get("/TurnyroVarzybos/End?varzybuID=" + turnyroVarzybuID, function (data) {
-                if (isTourneyOver(allMatches)) {
-                    $.get("/Turnyras/End?turnyroID=" + turnyrasID, function (data) {
-                        location.reload();
-                    });
-                }
-                else {
-                    location.reload();
-                }
-                console.log(data);
-            });
+        var address = 'http://localhost:58519/TurnyroVarzybos/SuggestScore?varzybuID=' + turnyroVarzybuID + '&scoreA=' + p1Score + '&scoreB=' + p2Score;
+        $.get(address, function (data) {
+            location.reload();
         });
     }
 
@@ -161,11 +139,11 @@
             if (teamNeedsToPlay(data)) {
                 opponentID = findOpponentID(data);
                 $.get("https://api.challonge.com/v1/tournaments/" + turnyrasID + "/participants/" + opponentID + ".json?api_key=LQaugevNzjBY1EoU7lfpvbyeyWFeUI6vWGP4tgWo", function (data) {
-                    console.log(data);
-                    $('#KomandaB_ID').val(data.participant.id)
+                    console.log('CIA VA ZIUREK', data);
+                    $('#KomandaB_ID').val(data.participant.id);
+                    $('#KomandaB_ID_DB').val(+data.participant.misc);
                     $('#tourney_management').find('#opponent_name').text(data.participant.display_name);
                     $('#Komanda_2_label').text(data.participant.display_name);
-
                     $.get("https://api.challonge.com/v1/tournaments/" + turnyrasID + "/participants/" + turnyroDalyvisID + ".json?api_key=LQaugevNzjBY1EoU7lfpvbyeyWFeUI6vWGP4tgWo", function (data) {
                         $('#Komanda_1_label').text(data.participant.display_name);
                         $('#tourney_management').show();
@@ -175,7 +153,63 @@
         });
     });
 
+    //Join tourney
+    var joinTourneyChallonge = function () {
+        var deferred = $.Deferred();
+        var address = "https://api.challonge.com/v1/tournaments/" + turnyrasID + "/participants.json";
+
+        $.post(address,
+        {
+            api_key: "LQaugevNzjBY1EoU7lfpvbyeyWFeUI6vWGP4tgWo",
+            participant: {
+                'name': komanda['name'],
+                'misc': komanda['id']
+            }
+
+        }
+        ).done(function (data) {
+            console.log(data);
+            deferred.resolve(data);
+        });
+
+        return deferred.promise();
+    }
+
+    var startTourney = function () {
+        var deferred = $.Deferred();
+        var address = "https://api.challonge.com/v1/tournaments/" + turnyrasID + "/start.json";
+
+        $.post(address,
+        {
+            api_key: "LQaugevNzjBY1EoU7lfpvbyeyWFeUI6vWGP4tgWo",
+
+        }
+        ).done(function (data) {
+            console.log(data);
+            deferred.resolve(data);
+        });
+
+        return deferred.promise();
+    }
+
+    var saveTourneyParticipant = function (participantID) {
+        $(location).attr('href', "/Turnyras/Join?id=" + turnyrasTikrasID + "&participantID=" + participantID);
+    }
+
+
     $('#joinTourney').on('click', function () {
         $('#loader').addClass('loading');
+        event.preventDefault();
+        joinTourneyChallonge().then(function (participantData) {
+            if (turnyroDydis === turnyroDalyviuKiekis + 1) {
+                startTourney().then(function (data) {
+                    saveTourneyParticipant(participantData.participant.id);
+                });
+            }
+            else {
+                saveTourneyParticipant(participantData.participant.id);
+            }
+        });
+
     });
 }());

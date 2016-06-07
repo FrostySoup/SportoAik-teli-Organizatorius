@@ -9,10 +9,14 @@ namespace WebApplication3.ViewModel.TurnyroViewModeliai
 {
     public class DetailsViewModel
     {
-        public string PasiulymoAikstele { get; set; }
+        public Aikstele Aikstele { get; set; }
         public Turnyras Turnyras { get; set; }
+        public Komanda Komanda { get; set; }
         public TurnyroVarzybos TurnyroVarzybos { get; set; }
+        public RezultatoPasiulymas RezultatoPasiulymas { get; set; }
         public TurnyroDalyvis TurnyroDalyvis { get; set; }
         public List<Aikstele> Aiksteles { get; set; }
+        public List<TurnyroVarzybos> VisosTurnyroVarzybos { get; set; }
+        public List<Komanda> VisosTurnyroKomandos { get; set; }
     }
 }

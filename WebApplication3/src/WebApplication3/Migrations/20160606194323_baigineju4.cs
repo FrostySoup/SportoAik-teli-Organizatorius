@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace WebApplication3.Migrations
 {
-    public partial class challonge8 : Migration
+    public partial class baigineju4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,10 +17,16 @@ namespace WebApplication3.Migrations
             migrationBuilder.DropForeignKey(name: "FK_UserRenginys_Renginys_RenginysId", table: "UserRenginys");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Komanda_KomandaID", table: "TurnyroDalyvis");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID", table: "TurnyroDalyvis");
-            migrationBuilder.AlterColumn<string>(
-                name: "LongX",
-                table: "Aikstele",
-                nullable: true);
+            migrationBuilder.AddColumn<int>(
+                name: "KomandaA_ID_DB",
+                table: "TurnyroVarzybos",
+                nullable: false,
+                defaultValue: 0);
+            migrationBuilder.AddColumn<int>(
+                name: "KomandaB_ID_DB",
+                table: "TurnyroVarzybos",
+                nullable: false,
+                defaultValue: 0);
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",
@@ -97,10 +103,8 @@ namespace WebApplication3.Migrations
             migrationBuilder.DropForeignKey(name: "FK_UserRenginys_Renginys_RenginysId", table: "UserRenginys");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Komanda_KomandaID", table: "TurnyroDalyvis");
             migrationBuilder.DropForeignKey(name: "FK_TurnyroDalyvis_Turnyras_TurnyrasID", table: "TurnyroDalyvis");
-            migrationBuilder.AlterColumn<double>(
-                name: "LongX",
-                table: "Aikstele",
-                nullable: false);
+            migrationBuilder.DropColumn(name: "KomandaA_ID_DB", table: "TurnyroVarzybos");
+            migrationBuilder.DropColumn(name: "KomandaB_ID_DB", table: "TurnyroVarzybos");
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                 table: "AspNetRoleClaims",

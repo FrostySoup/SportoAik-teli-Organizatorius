@@ -1,0 +1,71 @@
+﻿@model IEnumerable<WebApplication3.ViewModel.RezultatoPasiulymoViewModeliai.IndexViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<ol class="breadcrumb">
+    <li><a asp-controller="Home" asp-action="Index">Pradžia</a></li>
+    <li><a asp-controller="Turnyras" asp-action="Index">Turnyrai</a></li>
+    <li><a asp-controller="Turnyras" asp-action="Details" asp-route-id="@Model.First().Turnyras.TurnyrasID">"@Model.First().Turnyras.Pavadinimas"</a></li>
+    <li class="active">Rezultatų patvirtinimas</li>
+</ol>
+
+@foreach (var item in Model)
+{
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Rezultatų patvirtinimas. "@item.Komanda_A.Pavadinimas" vs "@item.Komanda_B.Pavadinimas".</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                @if (item.Komanda_A_Pasiulymas != null)
+                {
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-info">Komandos "@item.Komanda_A.Pavadinimas" pateiktas rezultatas:</li>
+                            <li class="list-group-item">"@item.Komanda_A.Pavadinimas"<span class="pull-right"><strong>@item.Komanda_A_Pasiulymas.KomandaA_Rez</strong></span></li>
+                            <li class="list-group-item">"@item.Komanda_B.Pavadinimas"<span class="pull-right"><strong>@item.Komanda_A_Pasiulymas.KomandaB_Rez</strong></span></li>
+                        </ul>
+                }
+                @if (item.Komanda_B_Pasiulymas != null)
+                {
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-info">Komandos "@item.Komanda_B.Pavadinimas" pateiktas rezultatas:</li>
+                        <li class="list-group-item">"@item.Komanda_A.Pavadinimas"<span class="pull-right"><strong>@item.Komanda_B_Pasiulymas.KomandaA_Rez</strong></span></li>
+                        <li class="list-group-item">"@item.Komanda_B.Pavadinimas"<span class="pull-right"><strong>@item.Komanda_B_Pasiulymas.KomandaB_Rez</strong></span></li>
+                    </ul>
+                }
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <form name="confirm_score_form" data-varzybos="@item.TurnyroVarzybos.TurnyroVarzybosID" data-turnyras="@item.Turnyras.ChallongeAddress" data-challonge="@item.Komanda_A_ChallongeID" action="/Turnyras/Create" method="post" novalidate="novalidate">
+                    <div class="form-horizontal">
+                        <div class="text-danger"></div>
+                        <div class="form-group">
+                            <label id="Komanda_1_label" class="col-md-5 control-label" for="Pavadinimas">@item.Komanda_A.Pavadinimas</label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" id="Komanda_1" name="Komanda_1" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label id="Komanda_2_label" class="col-md-5 control-label" for="Pavadinimas">@item.Komanda_B.Pavadinimas</label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" id="Komanda_2" name="Komanda_2" value="">
+                            </div>
+                        </div>
+                        <div class="form-group no-bottom-margin">
+                            <div class="col-md-offset-5 col-md-9">
+                                <input type="button" name="confirmScore" value="Patvirtinti rezultatus" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@section Scripts {
+    <script src="~/js/RezultatoPasiulymas/Index/script.js"></script>
+}

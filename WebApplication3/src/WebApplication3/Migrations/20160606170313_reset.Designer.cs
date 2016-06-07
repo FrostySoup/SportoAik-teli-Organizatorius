@@ -8,8 +8,8 @@ using WebApplication3.Models.Identity;
 namespace WebApplication3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20160524140938_VartotojuVertinimas")]
-    partial class VartotojuVertinimas
+    [Migration("20160606170313_reset")]
+    partial class reset
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -267,6 +267,22 @@ namespace WebApplication3.Migrations
                     b.HasKey("KomandaID");
                 });
 
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.RezultatoPasiulymas", b =>
+                {
+                    b.Property<int>("RezultatoPasiulymasID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("KomandaA_Rez");
+
+                    b.Property<int>("KomandaB_Rez");
+
+                    b.Property<int?>("KomandaKomandaID");
+
+                    b.Property<int?>("TurnyroVarzybosTurnyroVarzybosID");
+
+                    b.HasKey("RezultatoPasiulymasID");
+                });
+
             modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Turnyras", b =>
                 {
                     b.Property<int>("TurnyrasID")
@@ -315,17 +331,39 @@ namespace WebApplication3.Migrations
 
                     b.Property<int>("KomandaA_ID");
 
+                    b.Property<int>("KomandaA_Rez");
+
                     b.Property<int>("KomandaB_ID");
+
+                    b.Property<int>("KomandaB_Rez");
 
                     b.Property<int>("PakvietimoBusena");
 
                     b.Property<DateTime>("PrasidejimoData");
+
+                    b.Property<int>("RezultatoBusena");
 
                     b.Property<DateTime>("SukurimoData");
 
                     b.Property<int>("TurnyrasID");
 
                     b.HasKey("TurnyroVarzybosID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.TurnyroVarzybuKomentaras", b =>
+                {
+                    b.Property<int>("TurnyroVarzybuKomentarasID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Data");
+
+                    b.Property<string>("Komentaras");
+
+                    b.Property<string>("KomentaroAutoriusId");
+
+                    b.Property<int?>("TurnyroVarzybosTurnyroVarzybosID");
+
+                    b.HasKey("TurnyroVarzybuKomentarasID");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>
@@ -467,6 +505,17 @@ namespace WebApplication3.Migrations
                         .HasForeignKey("KapitonasId");
                 });
 
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.RezultatoPasiulymas", b =>
+                {
+                    b.HasOne("WebApplication3.Models.TurnyroModeliai.Komanda")
+                        .WithMany()
+                        .HasForeignKey("KomandaKomandaID");
+
+                    b.HasOne("WebApplication3.Models.TurnyroModeliai.TurnyroVarzybos")
+                        .WithMany()
+                        .HasForeignKey("TurnyroVarzybosTurnyroVarzybosID");
+                });
+
             modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.Turnyras", b =>
                 {
                     b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
@@ -483,6 +532,17 @@ namespace WebApplication3.Migrations
                     b.HasOne("WebApplication3.Models.TurnyroModeliai.Turnyras")
                         .WithMany()
                         .HasForeignKey("TurnyrasID");
+                });
+
+            modelBuilder.Entity("WebApplication3.Models.TurnyroModeliai.TurnyroVarzybuKomentaras", b =>
+                {
+                    b.HasOne("WebApplication3.Models.Identity.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("KomentaroAutoriusId");
+
+                    b.HasOne("WebApplication3.Models.TurnyroModeliai.TurnyroVarzybos")
+                        .WithMany()
+                        .HasForeignKey("TurnyroVarzybosTurnyroVarzybosID");
                 });
 
             modelBuilder.Entity("WebApplication3.Models.VartotojoModeliai.Komentaras", b =>

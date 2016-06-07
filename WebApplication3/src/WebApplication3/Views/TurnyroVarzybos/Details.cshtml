@@ -1,36 +1,63 @@
-@model WebApplication3.Models.TurnyroModeliai.TurnyroVarzybos
+﻿@model WebApplication3.ViewModel.TurnyroVarzybosViewModel.DetailsViewModel
+@using WebApplication3.Models.TurnyroModeliai
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li><a asp-controller="Home" asp-action="Index">Pradžia</a></li>
+    <li><a asp-controller="Turnyras" asp-action="Index">Turnyrai</a></li>
+    <li><a asp-controller="Turnyras" asp-action="Details" asp-route-id="@Model.Turnyras.TurnyrasID">"@Model.Turnyras.Pavadinimas"</a></li>
+    <li class="active">"@(@Model.VisosTurnyroKomandos.Where(k => k.KomandaID == @Model.turnyroVarzybos.KomandaA_ID_DB).SingleOrDefault().Pavadinimas)" vs "@(@Model.VisosTurnyroKomandos.Where(k => k.KomandaID == @Model.turnyroVarzybos.KomandaB_ID_DB).SingleOrDefault().Pavadinimas)"</li>
+</ol>
 
-<div>
-    <h4>TurnyroVarzybos</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.PakvietimoBusena)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PakvietimoBusena)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PrasidejimoData)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PrasidejimoData)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.SukurimoData)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.SukurimoData)
-        </dd>
-    </dl>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Varžybos "@(@Model.VisosTurnyroKomandos.Where(k => k.KomandaID == @Model.turnyroVarzybos.KomandaA_ID_DB).SingleOrDefault().Pavadinimas)" vs "@(@Model.VisosTurnyroKomandos.Where(k => k.KomandaID == @Model.turnyroVarzybos.KomandaB_ID_DB).SingleOrDefault().Pavadinimas)"</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info">Pagrindinė varžybų informacija</li>
+                    <li class="list-group-item">Varžybų laikas:<span class="pull-right"><strong>@Model.turnyroVarzybos.PrasidejimoData</strong></span></li>
+                    <li class="list-group-item">Varžybų vieta:<span class="pull-right"><strong>
+                        @(@Model.VisosAiksteles.Where(k => k.AiksteleID == @Model.turnyroVarzybos.AiksteleID).SingleOrDefault().Adresas),
+                        @(@Model.VisosAiksteles.Where(k => k.AiksteleID == @Model.turnyroVarzybos.AiksteleID).SingleOrDefault().Miestas)                
+                        </strong></span></li>
+                    @if (@Model.turnyroVarzybos.RezultatoBusena == RezultatoBusena.Nepatvirtintas) {
+                        <li class="list-group-item">Varžybų statusas:<span class="pull-right"><strong>Vykstančios</strong></span></li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">Varžybų statusas:<span class="pull-right"><strong>Pasibaigusios</strong></span></li>
+                        <li class="list-group-item">"@(@Model.VisosTurnyroKomandos.Where(k => k.KomandaID == @Model.turnyroVarzybos.KomandaA_ID_DB).SingleOrDefault().Pavadinimas)" taškai:<span class="pull-right"><strong>@Model.turnyroVarzybos.KomandaA_Rez</strong></span></li>
+                        <li class="list-group-item">"@(@Model.VisosTurnyroKomandos.Where(k => k.KomandaID == @Model.turnyroVarzybos.KomandaB_ID_DB).SingleOrDefault().Pavadinimas)" taškai:<span class="pull-right"><strong>@Model.turnyroVarzybos.KomandaB_Rez</strong></span></li>
+                    }
+
+                </ul>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                @foreach (var comment in Model.VisiKomentarai)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>@comment.KomentaroAutorius.FullName</strong> <span class="text-muted">@comment.Data</span>
+                        </div>
+                        <div class="panel-body">
+                            @comment.Komentaras
+                        </div>
+                    </div>
+                }     
+                   
+                <form action="/TurnyroVarzybos/AddComment?varzybos=@Model.turnyroVarzybos.TurnyroVarzybosID&tourney=@Model.Turnyras.TurnyrasID" method="post">
+                    <div class="form-group">
+                        <textarea asp-for="TurnyroVarzybuKomentaras.Komentaras" class="form-control"></textarea>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Komentuoti">
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.TurnyroVarzybosID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</p>

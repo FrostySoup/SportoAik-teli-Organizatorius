@@ -1,0 +1,30 @@
+@model WebApplication3.Models.TurnyroModeliai.RezultatoPasiulymas
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RezultatoPasiulymas</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.KomandaA_Rez)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.KomandaA_Rez)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.KomandaB_Rez)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.KomandaB_Rez)
+        </dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.RezultatoPasiulymasID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>

@@ -242,3 +242,7 @@ body {
 .wannaPlay p:last-of-type {
     margin-bottom: 0;
 }
+
+.no-bottom-margin {
+    margin-bottom: 0;
+}
